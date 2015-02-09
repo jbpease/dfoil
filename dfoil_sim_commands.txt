@@ -1,0 +1,39 @@
+## No-introgression Null Window Size Simulations
+python dfoil_sim.py null_sim_5kb.sites --nloci 10000 --recomb 1e-8 --window 5000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 
+python dfoil_sim.py null_sim_25kb.sites --nloci 10000 --recomb 1e-8 --window 25000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 
+python dfoil_sim.py null_sim_70kb.sites --nloci 10000 --recomb 1e-8 --window 70000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 
+python dfoil_sim.py null_sim_100kb.sites --nloci 10000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 
+python dfoil_sim.py null_sim_150kb.sites --nloci 5000 --recomb 1e-7 --window 15000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 
+
+## Directional Introgression Simulations
+python dfoil_sim.py introg_sim_1_3.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 1 --mdest 3 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_3_1.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 3 --mdest 1 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_1_4.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 1 --mdest 4 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_4_1.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 4 --mdest 1 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_2_3.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 2 --mdest 3 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_3_2.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 3 --mdest 2 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_2_4.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 2 --mdest 4 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_4_2.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 4 --mdest 2 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_12_3.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 1 --mdest 3 --mtimes 0.7 0.75 --mrate 5e-5
+python dfoil_sim.py introg_sim_3_12.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 3 --mdest 1 --mtimes 0.7 0.75 --mrate 5e-5
+python dfoil_sim.py introg_sim_12_4.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 1 --mdest 4 --mtimes 0.7 0.75 --mrate 5e-5
+python dfoil_sim.py introg_sim_4_12.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 4 --mdest 1 --mtimes 0.7 0.75 --mrate 5e-5
+python dfoil_sim.py introg_sim_1_2.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 1 --mdest 2 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_2_1.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 2 --mdest 1 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_3_4.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 3 --mdest 4 --mtimes 0.2 0.25 --mrate 5e-5
+python dfoil_sim.py introg_sim_4_3.sites --nloci 100 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 0.5 1 --mu 7e-8 --msource 4 --mdest 3 --mtimes 0.2 0.25 --mrate 5e-5
+
+## Migration Rate Simulations
+python dfoil_sim.py mrate_sim_0.1.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.5 0.55 --mrate 1e-7
+python dfoil_sim.py mrate_sim_1.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.5 0.55 --mrate 1e-6
+python dfoil_sim.py mrate_sim_5.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.5 0.55 --mrate 5e-6
+python dfoil_sim.py mrate_sim_50.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.5 0.55 --mrate 5e-5
+python dfoil_sim.py mrate_sim_500.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.5 0.55 --mrate 5e-4
+
+
+## Migration Time Simulations (note that T=0.5 used mrate_sim_5.sites above)
+python dfoil_sim.py mtime_sim_0.9.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.9 0.95 --mrate 5e-6
+python dfoil_sim.py mtime_sim_0.7.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.7 0.75 --mrate 5e-6
+python dfoil_sim.py mtime_sim_0.3.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.3 0.35 --mrate 5e-6
+python dfoil_sim.py mtime_sim_0.1.sites --nloci 1000 --recomb 1e-7 --window 10000 --coaltimes 1.5 1.2 1 1 --mu 7e-9 --msource 1 --mdest 3 --mtimes 0.1 0.15 --mrate 5e-6
+
