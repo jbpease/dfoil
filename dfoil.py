@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 DFOIL: Directional introgression testing a five-taxon phylogeny
@@ -555,16 +556,17 @@ def main(arguments=sys.argv[1:]):
                 arr = line.rstrip().split()
                 window = DataWindow(meta=dict(
                     chrom=arr[0], position=int(arr[1]),
-                    total=int(arr[2]), mode=args.mode,
+                    mode=args.mode,
                     beta=(args.beta1, args.beta2, args.beta3)))
-                if window.meta['total'] < args.mintotal:
-                    continue
                 if args.mode in ["dfoil", "partitioned"]:
-                    window.counts = dict([(j - 3) * 2, int(arr[j])]
-                                         for j in xrange(3, 19))
+                    window.counts = dict([(j - 2) * 2, int(arr[j])]
+                                         for j in xrange(2, 18))
                 elif args.mode == 'dstat':
-                    window.counts = dict([(j - 3) * 2, int(arr[j])]
-                                         for j in xrange(3, 11))
+                    window.counts = dict([(j - 2) * 2, int(arr[j])]
+                                         for j in xrange(2, 9))
+                if sum(window.counts.values()) < args.mintotal:
+                        continue
+                window.meta['total'] = sum(window.counts.values())
                 window.dcalc(mincount=args.mincount)
                 window.calc_signature(pvalue_cutoffs=args.pvalue)
                 window_data.append(window)
