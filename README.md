@@ -8,16 +8,18 @@
 If you use this program, please cite:
 
 ```
-James B Pease, Matthew W. Hahn.
-"Detection and Polarization of Introgression in a Five-taxon Phylogeny" In revision.
-http://biorxiv.org/content/early/2014/05/01/004689.short
-doi: 10.1101/004689 
+James B Pease, Matthew W. Hahn. 2015.
+"Detection and Polarization of Introgression in a Five-taxon Phylogeny" 
+Systematic Biology.
+http://www.dx.doi.org/10.1093/sysbio/syv023
+doi: 10.1093/sysbio/syv023
 ```
 ## Version History
 * v. 2014-02-07 Re-release version on GitHub
+* v. 2014-04-28 Fixes for Python3 compatibility
 
 ## Requirements:
-* Python 2.6+ (2.6+ and 3.x compatible)
+* Python 2.7+ or 3.x
 * [Scipy](http://www.scipy.org/)
 * [Numpy](http://www.numpy.org/)
 * [matplotlib](http://www.matplotlib.org/)

@@ -7,7 +7,14 @@ http://www.github.com/jbpease/dfoil
 dfoil_analyzed - summary statistics of dfoil output
 @author: James B. Pease
 
-Version: 2015-02-07 - Re-release on GitHub
+If you use this software please cite:
+Pease JB and MW Hahn. 2015.
+"Detection and Polarization of Introgression in a Five-taxon Phylogeny"
+Systematic Biology. Online.
+http://www.dx.doi.org/10.1093/sysbio/syv023
+
+v.2015-02-07 - Re-release on GitHub
+v.2015-04-28 - Upgrades and Python3 compatibility fixes
 
 This file is part of DFOIL.
 
@@ -27,6 +34,7 @@ along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import print_function
+from io import open
 import sys, argparse
 from numpy import mean, percentile, var, std
 
@@ -44,10 +52,10 @@ def printlist(entry, delim="\t", ndigits=3):
                 newlist.append(int(elem))
             else:
                 raise ValueError
-        except ValueError:
+        except ValueError as errstr:
             try:
                 newlist.append(decstring.format(elem))
-            except ValueError:
+            except ValueError as errstr:
                 newlist.append(str(elem))
     print(delim.join(["{}".format(x) for x in newlist]))
 
@@ -93,7 +101,7 @@ def main(arguments=sys.argv[1:]):
             "var", "sd  ", 'ab<0.01', '>0  ',
             '<0.05', 'cr0.5', 'cr0.05', 'cr0.01',
             ]))
-        for i in xrange(len(dstat)):
+        for i in range(len(dstat)):
             total = len(dstat[i])
             entry = (
                 [(i == 0 and name or statfields[i]),
@@ -109,7 +117,7 @@ def main(arguments=sys.argv[1:]):
                    float(sum([int(x >= 6.64) for x in dstat[i]])) / total])
             printlist(entry, ndigits=args.ndigits)
     print ("\n# Introgression Calls:\n")
-    for key, value in introg_call.iteritems():
+    for (key, value) in iter(introg_call.items()):
         print(key, value)
     return ''
 

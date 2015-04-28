@@ -7,7 +7,14 @@ http://www.github.com/jbpease/dfoil
 dfoil - main introgression testing script
 @author: James B. Pease
 
-Version: 2015-02-07 - Re-release on GitHub
+If you use this software please cite:
+Pease JB and MW Hahn. 2015.
+"Detection and Polarization of Introgression in a Five-taxon Phylogeny"
+Systematic Biology. Online.
+http://www.dx.doi.org/10.1093/sysbio/syv023
+
+v.2015-02-07 - Re-release on GitHub
+v.2015-04-28 - Upgrades and Python3 compatibility fixes
 
 This file is part of DFOIL.
 
@@ -26,6 +33,7 @@ along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from __future__ import print_function
+from io import open
 import argparse, sys
 from numpy import mean
 from scipy.stats import chi2
@@ -233,7 +241,7 @@ def chi2_test(val0, val1):
             return (0, 1)
         pval = 1.0 - chi2.cdf(chisq, 1)
         return (chisq, pval)
-    except ZeroDivisionError:
+    except ZeroDivisionError as errstr:
         return (0, 1)
 
 def make_header(mode):
@@ -323,21 +331,21 @@ def plot_dfoil(path, params, window_data, bool_data):
     ## Begin PLot
     if params['plot_smooth']:
         dplots = [[mean(dplot[x:x + params['plot_smooth']])
-                   for x in xrange(0, len(dplot), params['plot_smooth'])]
+                   for x in range(0, len(dplot), params['plot_smooth'])]
                   for dplot in dplots]
         xdstat = xdstat[::params['plot_smooth']]
     xbin = [int(window.meta['position']) for window in window_data]
     if params['plot_color'] == 'bw':
         if params['mode'] == 'dstat':
             binplot = [int('1' in bool_data[x][2:]) * 10000 - 5000
-                       for x in xrange(len(bool_data))]
+                       for x in range(len(bool_data))]
     else:
         binplots = [[int(window[x])*10000 - 5000 for window in bool_data]
-                    for x in xrange(2, len(bool_data[0]))]
+                    for x in range(2, len(bool_data[0]))]
     if params['plot_smooth']:
         totalplot = [mean([x[3] for x in
                            window_data[y:y + params['plot_smooth']]])
-                     for y in xrange(0, len(window_data),
+                     for y in range(0, len(window_data),
                                      params['plot_smooth'])]
     else:
         totalplot = [int(window.meta['total'])
@@ -560,10 +568,10 @@ def main(arguments=sys.argv[1:]):
                     beta=(args.beta1, args.beta2, args.beta3)))
                 if args.mode in ["dfoil", "partitioned"]:
                     window.counts = dict([(j - 2) * 2, int(arr[j])]
-                                         for j in xrange(2, 18))
+                                         for j in range(2, 18))
                 elif args.mode == 'dstat':
                     window.counts = dict([(j - 2) * 2, int(arr[j])]
-                                         for j in xrange(2, 9))
+                                         for j in range(2, 9))
                 if sum(window.counts.values()) < args.mintotal:
                         continue
                 window.meta['total'] = sum(window.counts.values())
@@ -579,7 +587,7 @@ def main(arguments=sys.argv[1:]):
             bool_data = []
             for window in window_data:
                 bool_flags = [
-                    '0' for x in xrange(len(INTROGPATTERNS[args.mode]))]
+                    '0' for x in range(len(INTROGPATTERNS[args.mode]))]
                 bool_flags[window.stats['signature']] = '1'
                 bool_data.append(bool_flags)
                 entry = [str(window.meta[k]) for k in [

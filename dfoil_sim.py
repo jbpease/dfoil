@@ -7,7 +7,14 @@ http://www.github.com/jbpease/dfoil
 dfoil_sim - simulation of sequences for testing dfoil
 @author: James B. Pease
 
-Version: 2015-02-07 - Re-release on GitHub
+If you use this software please cite:
+Pease JB and MW Hahn. 2015.
+"Detection and Polarization of Introgression in a Five-taxon Phylogeny"
+Systematic Biology. Online.
+http://www.dx.doi.org/10.1093/sysbio/syv023
+
+v.2015-02-07 - Re-release on GitHub
+v.2015-04-28 - Upgrades and Python3 compatibility fixes
 
 This file is part of DFOIL.
 
@@ -26,13 +33,25 @@ along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from __future__ import print_function
+from io import open
 import subprocess, sys, argparse
 from random import sample
 
 PATTERN_CONVERT = {
-    2: (6, 10, 18), 4: (6, 12, 20), 6: (14, 20), 8: (10, 12, 24),
-    10: (14, 26), 12: (14, 28), 14: (30), 16: (18, 20, 24),
-    18: (22, 26), 20: (22, 28), 22: (30), 24: (26, 28), 26: (30), 28: (30),
+    2: (6, 10, 18),
+    4: (6, 12, 20),
+    6: (14, 20),
+    8: (10, 12, 24),
+    10: (14, 26),
+    12: (14, 28),
+    14: (30),
+    16: (18, 20, 24),
+    18: (22, 26),
+    20: (22, 28),
+    22: (30),
+    24: (26, 28),
+    26: (30),
+    28: (30),
     }
 
 def run_ms(params):
@@ -98,8 +117,8 @@ def process_msfile(filepath, window):
             if '//' in line:
                 if seqs:
                     aligns.append(dict([(pos[j], ''.join([
-                        seqs[x][j] for x in xrange(len(seqs))]))
-                                        for j in xrange(len(pos))]))
+                        seqs[x][j] for x in range(len(seqs))]))
+                                        for j in range(len(pos))]))
                 seqs = []
             elif not line.strip():
                 continue
@@ -112,8 +131,8 @@ def process_msfile(filepath, window):
                 seqs.append(line.rstrip())
     if seqs:
         aligns.append(dict([(pos[j], ''.join([seqs[x][j]
-                                              for x in xrange(len(seqs))]))
-                            for j in xrange(len(pos))]))
+                                              for x in range(len(seqs))]))
+                            for j in range(len(pos))]))
     return aligns
 
 def process_aligns(aligns, params):
@@ -128,7 +147,7 @@ def process_aligns(aligns, params):
         coord_start = 0
         for i, align in enumerate(aligns):
             site_counts = {0:0}
-            for _, sitepattern in align.iteritems():
+            for (_, sitepattern) in iter(align.items()):
                 pattern = int(''.join([str(int(x != sitepattern[-1]))
                                        for x in sitepattern]), 2)
                 site_counts[pattern] = site_counts.get(pattern, 0) + 1
