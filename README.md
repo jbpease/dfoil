@@ -6,9 +6,7 @@
 
 ## Citation Information
 If you use this program, please cite:
-
 ```
-<<<<<<< HEAD
 James B Pease, Matthew W. Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny" 
 Systematic Biology.
@@ -17,17 +15,9 @@ doi: 10.1093/sysbio/syv023
 ```
 ## Version History
 * v. 2014-02-07 Re-release version on GitHub
+* v. 2015-04-17 Minor updates and citation information, Publication Release Version
 * v. 2014-04-28 Fixes for Python3 compatibility
 =======
-James B Pease, Matthew W. Hahn .
-"Detection and Polarization of Introgression in a Five-taxon Phylogeny" 
-2015. Systematic Biology. 
-doi: 10.1093/sysbio/syv023
-```
-## Version History
-* v. 2015-02-07 Re-release version on GitHub
-* v. 2015-04-17 Minor updates and citation information, Publication Release Version
->>>>>>> 598915a0b4a214ff58a6ea7f1a2e936e3aa08a6e
 
 ## Requirements:
 * Python 2.7+ or 3.x
