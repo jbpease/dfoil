@@ -35,7 +35,7 @@ Dependencies should be installed according to their individual instructions.
 
 ### Input Format
 One or more input files can be specified.
-These files can have any number of header lines at the beginning, but **all header lines must start with '#'**
+These files can have any number of header lines at the beginning (including none), but **all header lines must start with '#'**
 
 Data fields should be tab/space separated files with two starting fields:
 
