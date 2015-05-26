@@ -15,6 +15,7 @@ http://www.dx.doi.org/10.1093/sysbio/syv023
 
 v.2015-02-07 - Re-release on GitHub
 v.2015-04-28 - Upgrades and Python3 compatibility fixes
+v.2015-05-26 - Minor fix to output file writing
 
 This file is part of DFOIL.
 
@@ -528,7 +529,7 @@ def main(arguments=sys.argv[1:]):
                         help="display version information and quit")
     args = parser.parse_args(args=arguments)
     if args.version:
-        print("DFOIL v. 2015-02-07")
+        print("DFOIL v. 2015-05-26")
         sys.exit()
 #### ===== INITIALIZE =====
     if not args.out:
@@ -582,7 +583,7 @@ def main(arguments=sys.argv[1:]):
         if args.runlength:
             window_data = fill_windows(window_data, args.runlength)
 ######## ===== WRITE TO OUTPUT =====
-        with open(args.out[ifile], 'w') as outfile:
+        with open(args.out[ifile], 'wb') as outfile:
             outfile.write(make_header(args.mode))
             bool_data = []
             for window in window_data:
