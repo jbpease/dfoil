@@ -34,7 +34,8 @@ along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import print_function
 from io import open
-import argparse, sys
+import sys
+import argparse
 from numpy import mean
 from scipy.stats import chi2
 import matplotlib
