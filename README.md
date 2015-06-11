@@ -17,6 +17,7 @@ doi: 10.1093/sysbio/syv023
 * v. 2014-02-07 Re-release version on GitHub
 * v. 2015-04-17 Minor updates and citation information, Publication Release Version
 * v. 2014-04-28 Fixes for Python3 compatibility
+
 =======
 
 ## Requirements:
@@ -34,7 +35,9 @@ Dependencies should be installed according to their individual instructions.
 
 ### Input Format
 One or more input files can be specified.
-Input files must be tab/space separated files with two starting fields:
+These files can have any number of header lines at the beginning (including none), but **all header lines must start with '#'**
+
+Data fields should be tab/space separated files with two starting fields:
 
 * `CHROMOSOME` (this can be dummy values) 
 * `POSITION` (also can be dummy values)
