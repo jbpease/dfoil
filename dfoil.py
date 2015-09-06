@@ -13,9 +13,10 @@ Pease JB and MW Hahn. 2015.
 Systematic Biology. Online.
 http://www.dx.doi.org/10.1093/sysbio/syv023
 
-v.2015-02-07 - Re-release on GitHub
-v.2015-04-28 - Upgrades and Python3 compatibility fixes
-v.2015-05-26 - Minor fix to output file writing
+version 2015-02-07 - Re-release on GitHub
+version 2015-04-28 - Upgrades and Python3 compatibility fixes
+version 2015-05-26 - Minor fix to output file writing
+@version 2015-09-05 - Minor fix for Python 3.x compatibility
 
 This file is part of DFOIL.
 
@@ -33,7 +34,7 @@ You should have received a copy of the GNU General Public License
 along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 from io import open
 import sys
 import argparse
@@ -41,9 +42,9 @@ from numpy import mean
 from scipy.stats import chi2
 import matplotlib
 
-
-SIGNCODES = {'dfoil': {'+++0': 2, '--0+': 3, '++-0': 4, '--0-': 5, '+0++': 6,
-                       '-0++': 7, '0+--': 8, '0---': 9, '++00': 10, '--00': 11},
+SIGNCODES = {'dfoil': {'+++0': 2, '--0+': 3, '++-0': 4, '--0-': 5,
+                       '+0++': 6, '-0++': 7, '0+--': 8, '0---': 9,
+                       '++00': 10, '--00': 11},
              'partitioned': {'-00': 2, '0-0': 3, '+00': 4, '0+0': 5,
                              '-0+': 6, '0-+': 7, '+0-': 8, '0+-': 9},
              'dstat': {'+': 2, '-': 3}}
@@ -69,6 +70,7 @@ INTROGLABELS = {'dfoil': ['N/A', 'None',
                 'dstat': ['N/A', 'None',
                           '2$\\Leftrightarrow$3', '1$\\Leftrightarrow$3']}
 INTROGLABELS['partitioned'] = INTROGPATTERNS['dfoil']
+
 
 class DataWindow(object):
     """Basic Handler of each data entry"""
@@ -106,12 +108,12 @@ class DataWindow(object):
                 (self.counts[8] * beta0 + self.counts[12] * beta1 +
                  self.counts[18] * beta1 + self.counts[22] * beta2),
                 (self.counts[16] * beta0 + self.counts[10] * beta1 +
-                 self.counts[20] * beta1 +  self.counts[14] * beta2),
+                 self.counts[20] * beta1 + self.counts[14] * beta2),
                 mincount=mincount)
             self.stats['Dtotal'] = (
-                (sum([self.counts[x] for x in (2, 4, 8, 16)]) * beta0)
-                + (sum([self.counts[x] for x in (10, 12, 18, 20)]) * beta1)
-                + (sum([self.counts[x] for x in (14, 22, 26, 28)]) * beta2))
+                (sum([self.counts[x] for x in (2, 4, 8, 16)]) * beta0) +
+                (sum([self.counts[x] for x in (10, 12, 18, 20)]) * beta1) +
+                (sum([self.counts[x] for x in (14, 22, 26, 28)]) * beta2))
             self.stats['Tvalues'] = self.calculate_5taxon_tvalues()
         elif self.meta['mode'] == "partitioned":
             self.stats['D1'] = dcrunch(self.counts[12], self.counts[20],
@@ -129,12 +131,10 @@ class DataWindow(object):
                 self.counts[10] * beta1 + self.counts[4] * beta0,
                 mincount=mincount)
             self.stats['Dtotal'] = (
-                (sum([self.counts[x] for x in (4, 8)]) * beta0)
-                + (sum([self.counts[x] for x in (6, 10)]) * beta1))
+                (sum([self.counts[x] for x in (4, 8)]) * beta0) +
+                (sum([self.counts[x] for x in (6, 10)]) * beta1))
             self.calculate_4taxon_tvalues(self.counts)
         return ''
-
-
 
     def calculate_5taxon_tvalues(self, counts=None):
         """Calculate approximate divergence times for a five-taxon tree
@@ -145,10 +145,10 @@ class DataWindow(object):
         total = float(sum(counts.values()))
         if not total:
             return {'T34': 0.0, 'T12': 0.0, 'T1234': 0.0}
-        self.stats['T34'] = float(counts.get(2, 0)
-                                  + counts.get(4, 0)) / (2 * total)
-        self.stats['T12'] = float(counts.get(8, 0)
-                                  + counts.get(16, 0)) / (2 * total)
+        self.stats['T34'] = float(counts.get(2, 0) +
+                                  counts.get(4, 0)) / (2 * total)
+        self.stats['T12'] = float(counts.get(8, 0) +
+                                  counts.get(16, 0)) / (2 * total)
         self.stats['T1234'] = 0.5 * (((float(counts.get(24, 0)) / total) +
                                       self.stats['T12']) +
                                      ((float(counts.get(6, 0)) / total) +
@@ -164,11 +164,11 @@ class DataWindow(object):
         total = float(sum(counts.values()))
         if not total:
             return {'T12': 0.0, 'T123': 0.0}
-        self.stats['T12'] = (float(counts.get(8, 0) + counts.get(4, 0))
-                             / (2.0 * total))
-        self.stats['T123'] = 0.5 * (((float(counts.get(12, 0)) / total)
-                                     + self.stats['T12'])
-                                    + float(counts.get(2, 0)) /total)
+        self.stats['T12'] = (float(counts.get(8, 0) + counts.get(4, 0)) /
+                             (2.0 * total))
+        self.stats['T123'] = 0.5 * (((float(counts.get(12, 0)) / total) +
+                                     self.stats['T12']) +
+                                    float(counts.get(2, 0)) / total)
         return ''
 
     def calc_signature(self, pvalue_cutoffs=None):
@@ -201,6 +201,7 @@ class DataWindow(object):
                                                       1)
         return ''
 
+
 def dcrunch(left_term, right_term, mincount=0):
     """Calculate D-statistic
         Arguments:
@@ -219,16 +220,17 @@ def dcrunch(left_term, right_term, mincount=0):
     elif left_term + right_term < mincount:
         result['chisq'] = 0
         result['Pvalue'] = 1.0
-        result['D'] = (float(left_term - right_term)
-                       / (left_term + right_term))
+        result['D'] = (float(left_term - right_term) /
+                       (left_term + right_term))
     else:
         (val, pval) = chi2_test(left_term, right_term)
         result['chisq'] = val
         result['Pvalue'] = pval
-        result['D'] = (float(left_term - right_term)
-                       / (left_term + right_term))
+        result['D'] = (float(left_term - right_term) /
+                       (left_term + right_term))
 
     return result
+
 
 def chi2_test(val0, val1):
     """Calculate Pearson Chi-Squared for the special case of
@@ -246,20 +248,23 @@ def chi2_test(val0, val1):
     except ZeroDivisionError as errstr:
         return (0, 1)
 
+
 def make_header(mode):
     """Create Column Headers for Various Modes
         Arguments:
             mode: dfoil statistical mode
     """
-    return "{}\n".format('\t'.join(
-        ['#chrom', 'coord', 'total', 'dtotal']
-        + DIVNAMES[mode]
-        + ['{}_{}'.format(x, y)
-           for x in STATNAMES[mode]
-           for y in ('left', 'right', 'total',
-                     'stat', 'chisq', 'Pvalue')]
-        + ['introgression']
-        + ['introg{}'.format(x) for x in INTROGPATTERNS[mode]]))
+
+    return ("{}\n".format('\t'.join(
+        ['#chrom', 'coord', 'total', 'dtotal'] +
+        DIVNAMES[mode] +
+        ['{}_{}'.format(x, y)
+         for x in STATNAMES[mode]
+         for y in ('left', 'right', 'total',
+                   'stat', 'chisq', 'Pvalue')] +
+        ['introgression'] +
+        ['introg{}'.format(x) for x in INTROGPATTERNS[mode]]))
+        ).encode('utf-8')
 
 
 def plot_colors(colormode="color", linealpha=1, bgalpha=0.7):
@@ -301,6 +306,7 @@ def plot_colors(colormode="color", linealpha=1, bgalpha=0.7):
         bin_colors[9] = (0, 0, 0, 0)
     return (dstat_colors, bin_colors, bgcolors)
 
+
 def plot_dfoil(path, params, window_data, bool_data):
     """Plot DFOIL stats
         Arguments:
@@ -311,7 +317,7 @@ def plot_dfoil(path, params, window_data, bool_data):
     """
     matplotlib.use('Agg')
     from matplotlib import pyplot as plt
-    ## Set up labels
+    # Set up labels
     dstat_names = STATNAMES[params['mode']]
     introgression_labels = INTROGLABELS[params['mode']]
     if params['plot_labels']:
@@ -322,15 +328,15 @@ def plot_dfoil(path, params, window_data, bool_data):
         if '+' in elem:
             introgression_labels[i] = elem.replace('$\\Rightarrow$',
                                                    '$\\Leftrightarrow$')
-    ## Establish Colors
+    # Establish Colors
     (dstat_colors, bin_colors,
      bgcolors) = plot_colors(colormode=params['plot_color'],
                              bgalpha=params['plot_background'])
-    ## Calcuate plot values
+    # Calcuate plot values
     xdstat = [int(window.meta['position']) for window in window_data]
     dplots = [[window.stats[dstat]['D'] for window in window_data]
               for dstat in dstat_names]
-    ## Begin PLot
+    # Begin PLot
     if params['plot_smooth']:
         dplots = [[mean(dplot[x:x + params['plot_smooth']])
                    for x in range(0, len(dplot), params['plot_smooth'])]
@@ -348,7 +354,7 @@ def plot_dfoil(path, params, window_data, bool_data):
         totalplot = [mean([x[3] for x in
                            window_data[y:y + params['plot_smooth']]])
                      for y in range(0, len(window_data),
-                                     params['plot_smooth'])]
+                                    params['plot_smooth'])]
     else:
         totalplot = [int(window.meta['total'])
                      for window in window_data]
@@ -363,16 +369,17 @@ def plot_dfoil(path, params, window_data, bool_data):
             host.plot(xdstat, dplot, color=dstat_colors[i][0],
                       linewidth=params['plot_lineweight'],
                       linestyle=dstat_colors[i][1], dashes=dashlen,
-                      label=("$D(+)$=" + dlabels[2] + "$\\Leftrightarrow$"
-                             + dlabels[1] +  ";   $D(-)$="
-                             + dlabels[2] + "$\\Leftrightarrow$" + dlabels[0]),
+                      label=(("$D(+)$={}$\\Leftrightarrow${};"
+                              "  $D(-)$={}{}$\\Leftrightarrow${}").format(
+                          dlabels[2], dlabels[1], dlabels[1], dlabels[2],
+                          dlabels[0])),
                       drawstyle="steps-pre")
         else:
             host.plot(xdstat, dplot, color=dstat_colors[i][0],
                       linewidth=params['plot_lineweight'],
                       linestyle=dstat_colors[i][1], dashes=dashlen,
-                      label=("$" + dstat_names[i][0] + "_{"
-                             + dstat_names[i][1:] + "}$"),
+                      label=("$" + dstat_names[i][0] + "_{" +
+                             dstat_names[i][1:] + "}$"),
                       drawstyle="steps-pre")
     if params['plot_background']:
         if params['plot_color'] == 'bw':
@@ -421,6 +428,7 @@ def plot_dfoil(path, params, window_data, bool_data):
         plt.savefig(path)
     return ''
 
+
 def fill_windows(window_data, run_length):
     """Fill background color between introgressing windows that
        are only separated by a certain number of non-introgressing windows
@@ -449,6 +457,7 @@ def fill_windows(window_data, run_length):
                 j += 1
         i += 1
     return window_data
+
 
 def main(arguments=sys.argv[1:]):
     """Main dfoil method"""
@@ -532,7 +541,7 @@ def main(arguments=sys.argv[1:]):
     if args.version:
         print("DFOIL v. 2015-05-26")
         sys.exit()
-#### ===== INITIALIZE =====
+    # ===== INITIALIZE =====
     if not args.out:
         raise RuntimeError("--out path not specified")
     if args.plot_path:
@@ -545,7 +554,7 @@ def main(arguments=sys.argv[1:]):
             "write mode specified for plot but --plot_path not specified")
     if len(args.pvalue) == 1:
         args.pvalue = [args.pvalue[0], args.pvalue[0]]
-    ## Set beta parameters for presets
+    # Set beta parameters for presets
     if not args.beta1:
         args.beta1 = args.mode in ['dfoil', 'dstatalt'] and 1. or 0.
     if not args.beta2:
@@ -556,7 +565,7 @@ def main(arguments=sys.argv[1:]):
         args.mode = 'dstat'
     elif args.mode == 'dfoilalt':
         args.mode = 'dfoil'
-#### ===== PARSE COUNT FILE  =====
+    # ===== PARSE COUNT FILE  =====
     for ifile, infilename in enumerate(args.infile):
         window_data = []
         with open(infilename) as infile:
@@ -580,10 +589,10 @@ def main(arguments=sys.argv[1:]):
                 window.dcalc(mincount=args.mincount)
                 window.calc_signature(pvalue_cutoffs=args.pvalue)
                 window_data.append(window)
-######## ===== ANALYZE WINDOWS AND DETERMINE RUNS ====-
+        # ===== ANALYZE WINDOWS AND DETERMINE RUNS ====-
         if args.runlength:
             window_data = fill_windows(window_data, args.runlength)
-######## ===== WRITE TO OUTPUT =====
+        # ===== WRITE TO OUTPUT =====
         with open(args.out[ifile], 'wb') as outfile:
             outfile.write(make_header(args.mode))
             bool_data = []
@@ -604,8 +613,8 @@ def main(arguments=sys.argv[1:]):
                 entry.append(
                     INTROGPATTERNS[args.mode][window.stats['signature']])
                 entry.extend(bool_flags)
-                outfile.write('\t'.join(entry) + '\n')
-######## ==== PLOT GRAPHS =====
+                outfile.write(('\t'.join(entry) + '\n').encode('utf-8'))
+        # ==== PLOT GRAPHS =====
         if args.plot != "none":
             plot_dfoil(args.plot == 'write' and args.plot_path[ifile] or '',
                        vars(args), window_data, bool_data)
