@@ -38,9 +38,11 @@ from __future__ import print_function, unicode_literals
 from io import open
 import sys
 import argparse
+from warnings import warn
 from numpy import mean
 from scipy.stats import chi2
 import matplotlib
+
 
 SIGNCODES = {'dfoil': {'+++0': 2, '--0+': 3, '++-0': 4, '--0-': 5,
                        '+0++': 6, '-0++': 7, '0+--': 8, '0---': 9,
@@ -572,24 +574,29 @@ def main(arguments=sys.argv[1:]):
             for line in infile:
                 if line[0] == '#':
                     continue
-                arr = line.rstrip().split()
-                window = DataWindow(meta=dict(
-                    chrom=arr[0], position=int(arr[1]),
-                    mode=args.mode,
-                    beta=(args.beta1, args.beta2, args.beta3)))
-                if args.mode in ["dfoil", "partitioned"]:
-                    window.counts = dict([(j - 2) * 2, int(arr[j])]
-                                         for j in range(2, 18))
-                elif args.mode == 'dstat':
-                    window.counts = dict([(j - 2) * 2, int(arr[j])]
-                                         for j in range(2, 9))
-                if sum(window.counts.values()) < args.mintotal:
-                        continue
-                window.meta['total'] = sum(window.counts.values())
-                window.dcalc(mincount=args.mincount)
-                window.calc_signature(pvalue_cutoffs=args.pvalue)
-                window_data.append(window)
-        # ===== ANALYZE WINDOWS AND DETERMINE RUNS ====-
+                try:
+                    arr = line.rstrip().split()
+                    window = DataWindow(meta=dict(
+                        chrom=arr[0], position=int(arr[1]),
+                        mode=args.mode,
+                        beta=(args.beta1, args.beta2, args.beta3)))
+                    if args.mode in ["dfoil", "partitioned"]:
+                        window.counts = dict([(j - 2) * 2, int(arr[j])]
+                                             for j in range(2, 18))
+                    elif args.mode == 'dstat':
+                        window.counts = dict([(j - 2) * 2, int(arr[j])]
+                                             for j in range(2, 9))
+                    if sum(window.counts.values()) < args.mintotal:
+                            continue
+                    window.meta['total'] = sum(window.counts.values())
+                    window.dcalc(mincount=args.mincount)
+                    window.calc_signature(pvalue_cutoffs=args.pvalue)
+                    window_data.append(window)
+                except:
+                    warn(
+                        "line invalid, skipping...\n{}".format(line))
+                    continue
+            # ===== ANALYZE WINDOWS AND DETERMINE RUNS ====-
         if args.runlength:
             window_data = fill_windows(window_data, args.runlength)
         # ===== WRITE TO OUTPUT =====
