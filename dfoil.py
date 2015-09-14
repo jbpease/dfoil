@@ -16,7 +16,8 @@ http://www.dx.doi.org/10.1093/sysbio/syv023
 version 2015-02-07 - Re-release on GitHub
 version 2015-04-28 - Upgrades and Python3 compatibility fixes
 version 2015-05-26 - Minor fix to output file writing
-@version 2015-09-05 - Minor fix for Python 3.x compatibility
+version 2015-09-05 - Minor fix for Python 3.x compatibility
+@version 2015-09-14 - Change to input specification, allow characters for zeros
 
 This file is part of DFOIL.
 
@@ -72,6 +73,10 @@ INTROGLABELS = {'dfoil': ['N/A', 'None',
                 'dstat': ['N/A', 'None',
                           '2$\\Leftrightarrow$3', '1$\\Leftrightarrow$3']}
 INTROGLABELS['partitioned'] = INTROGPATTERNS['dfoil']
+
+
+PLOTFORMATS = ("eps", "jpeg", "jpg", "pdf", "pgf", "png",
+               "ps", "raw", "rgba", "svg", "svgz", "tif", "tiff")
 
 
 class DataWindow(object):
@@ -466,10 +471,10 @@ def main(arguments=sys.argv[1:]):
     parser = argparse.ArgumentParser(description=("""
     Calculate DFOIL and D-statistics stats from one or more count files.
     USAGE: dfoiler.py INPUTFILE1 ... --out OUTPUTFILE1 ..."""))
-    parser.add_argument('infile', help="input tab-separated counts file",
-                        nargs='*')
+    parser.add_argument('--infile', help="input tab-separated counts file",
+                        nargs='*', required=True)
     parser.add_argument('--out', help="outputs tab-separated DFOIL stats",
-                        nargs='*')
+                        nargs='*', required=True)
     parser.add_argument('--mincount', type=int, default=10,
                         help="minium number of D denominator sites per window")
     parser.add_argument("--mintotal", type=int, default=50,
@@ -505,6 +510,9 @@ def main(arguments=sys.argv[1:]):
                         help="""beta3 coefficient for triple-B patterns
                                 defaults: DFOIL/DFOILalt=1.0,
                                 Dstat/Dpart=N.A.""")
+    parser.add_argument("--zerochar", default=[".", "NA"], nargs='*',
+                        help="""list of strings used in place of zeros
+                                in the input file default is [".", "NA"]""")
     parser.add_argument("--plot", choices=["show", "write", "none"],
                         default="none",
                         help="""show=interactive,
@@ -541,14 +549,19 @@ def main(arguments=sys.argv[1:]):
                         help="display version information and quit")
     args = parser.parse_args(args=arguments)
     if args.version:
-        print("DFOIL v. 2015-05-26")
+        print("2015-09-14")
         sys.exit()
     # ===== INITIALIZE =====
     if not args.out:
         raise RuntimeError("--out path not specified")
     if args.plot_path:
         if set(args.infile) & set(args.plot_path):
-            raise NameError
+            raise NameError("plot_path same as infile path")
+        for filepath in args.plot_path:
+            if not any(filepath.endswith(x) for x in PLOTFORMATS):
+                raise NameError(
+                    "{} does not end in one of these: {}".format(
+                        filepath, PLOTFORMATS))
     if set(args.infile) & set(args.out):
         raise NameError("input and output file have same path")
     if args.plot == 'write' and not args.plot_path:
@@ -581,13 +594,17 @@ def main(arguments=sys.argv[1:]):
                         mode=args.mode,
                         beta=(args.beta1, args.beta2, args.beta3)))
                     if args.mode in ["dfoil", "partitioned"]:
-                        window.counts = dict([(j - 2) * 2, int(arr[j])]
+                        window.counts = dict([
+                            (j - 2) * 2,
+                            arr[j] not in args.zerochar and int(arr[j]) or 0]
                                              for j in range(2, 18))
                     elif args.mode == 'dstat':
-                        window.counts = dict([(j - 2) * 2, int(arr[j])]
+                        window.counts = dict([
+                            (j - 2) * 2,
+                            arr[j] not in args.zerochar and int(arr[j]) or 0]
                                              for j in range(2, 9))
                     if sum(window.counts.values()) < args.mintotal:
-                            continue
+                        continue
                     window.meta['total'] = sum(window.counts.values())
                     window.dcalc(mincount=args.mincount)
                     window.calc_signature(pvalue_cutoffs=args.pvalue)
