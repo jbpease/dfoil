@@ -44,7 +44,7 @@ def fasta_iter(fasta_name):
         given a fasta file. yield tuples of header, sequence
         Adapted from https://github.com/brentp
     """
-    filehandler = open(fasta_name)
+    filehandler = open(fasta_name, 'r')
     faiter = (x[1] for x in groupby(filehandler, lambda line: line[0] == ">"))
     for header in faiter:
         header = next(header)[1:].strip()
@@ -90,16 +90,24 @@ def main(arguments=None):
                    'BBAAA', 'BBABA', 'BBBAA', 'BBBBA']
     else:
         raise RuntimeError("Invalid number of taxa, use 5 or 4")
-    with open(args.out, 'wb') as outfile:
+    with open(args.out, 'w') as outfile:
         outfile.write("#chrom\tposition\t{}\n".format('\t'.join(headers)))
     for infilename in args.fastafile:
         site_count = {}
-        seqs = dict(list(fasta_iter(infilename)))
-        if seqs.keys() != args.names:
+        seqs = {}
+        for header, seq in fasta_iter(infilename):
+            seqs[header] = seq
+        if list(sorted(seqs.keys())) != list(sorted(args.names)):
             raise RuntimeError(
                 "Error: Labels from {} ({}) do not match --names ({})".format(
                     infilename, seqs.keys(), args.names))
-        for i in range(len(seqs.values()[0])):
+        for label in seqs:
+            if len(seqs[label]) != len(seqs[args.names[0]]):
+                raise RuntimeError(
+                    "Error: Sequences in {} are of unequal length ({})".format(
+                        infilename, ",".join(["{}={}".format(
+                            x, len(seqs[x])) for x in seqs])))
+        for i in range(len(list(seqs.values())[0])):
             site = [str(seqs[name][i]) for name in args.names]
             if len(set(site)) > 2:
                 continue
@@ -109,8 +117,8 @@ def main(arguments=None):
                                  for x in site])
             site_count[site_code] = site_count.get(site_code, 0) + 1
 
-        with open(args.out, 'ab') as outfile:
-            outfile.write("FASTA\t{}\t{}".format(position,
+        with open(args.out, 'a') as outfile:
+            outfile.write("{}\t{}\t{}".format(infilename, position,
                           '\t'.join([str(site_count.get(x, 0))
                                      for x in headers])))
         position += 1
