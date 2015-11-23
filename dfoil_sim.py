@@ -10,11 +10,12 @@ dfoil_sim - simulation of sequences for testing dfoil
 If you use this software please cite:
 Pease JB and MW Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny"
-Systematic Biology. Online.
+Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
 
-v.2015-02-07 - Re-release on GitHub
-v.2015-04-28 - Upgrades and Python3 compatibility fixes
+version=2015-02-07 - Re-release on GitHub
+version=2015-04-28 - Upgrades and Python3 compatibility fixes
+@version=2015-11-23 - Minor compatibility fix and citation update
 
 This file is part of DFOIL.
 
@@ -32,9 +33,11 @@ You should have received a copy of the GNU General Public License
 along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from __future__ import print_function
-from io import open
-import subprocess, sys, argparse
+from __future__ import print_function, unicode_literals
+import sys
+import os
+import argparse
+import subprocess
 from random import sample
 
 PATTERN_CONVERT = {
@@ -53,6 +56,23 @@ PATTERN_CONVERT = {
     26: (30),
     28: (30),
     }
+
+
+def which(program):
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+    return None
+
 
 def run_ms(params):
     """Runs the ms program to simulate sequence evolutions
@@ -101,6 +121,7 @@ def run_ms(params):
         print("ms done")
     return '{}.ms.tmp'.format(params['outputfile'])
 
+
 def process_msfile(filepath, window):
     """Process a pre-computed ms output file
         Arguments:
@@ -135,6 +156,7 @@ def process_msfile(filepath, window):
                             for j in range(len(pos))]))
     return aligns
 
+
 def process_aligns(aligns, params):
     """Process alignments derived from an ms output file
         Arguments:
@@ -143,10 +165,10 @@ def process_aligns(aligns, params):
     """
     if params['nconverge']:
         conv_sites = []
-    with open(params['outputfile'], 'a') as outfile:
+    with open(params['outputfile'], 'ab') as outfile:
         coord_start = 0
         for i, align in enumerate(aligns):
-            site_counts = {0:0}
+            site_counts = {0: 0}
             for (_, sitepattern) in iter(align.items()):
                 pattern = int(''.join([str(int(x != sitepattern[-1]))
                                        for x in sitepattern]), 2)
@@ -161,13 +183,14 @@ def process_aligns(aligns, params):
                     site_counts[oldp] -= 1
                     newp = sample(PATTERN_CONVERT[oldp], 1)
                     site_counts[newp] = site_counts.get(newp, 0) + 1
-            outfile.write('\t'.join([
+            outfile.write(('\t'.join([
                 str(x) for x in ["SIM{}".format(i), coord_start,
-                                 sum(site_counts.values())]
-                + [site_counts.get(elem, 0) for elem in range(0, 32, 2)]])
-                          + '\n')
+                                 sum(site_counts.values())] +
+                [site_counts.get(elem, 0) for elem in range(0, 32, 2)]]) +
+                          '\n').encode('utf-8'))
             coord_start += params['window']
     return ''
+
 
 def main(arguments=sys.argv[1:]):
     """Main function for dfoil simulator"""
@@ -215,23 +238,29 @@ def main(arguments=sys.argv[1:]):
                         help="display version information and quit")
     args = parser.parse_args(args=arguments)
     if args.version:
-        print("DFOIL sim v. 2015-02-07")
+        print("2015-11-23")
         sys.exit()
     if args.rho and args.recomb:
         raise RuntimeError("Cannot use both --rho and --recomb")
     if args.mtimes:
         args.mtime_older = min(args.mtimes)
         args.mtime_newer = max(args.mtimes)
-#### BEGIN PARAMS
+    if not args.msfile:
+        if which(args.mspath) is None:
+            raise RuntimeError("Cannot find 'ms' at path='{}', "
+                               "is it installed?".format(
+                args.mspath))
+    # BEGIN PARAMS
     site_patterns = ['AAAAA', 'AAABA', 'AABAA', 'AABBA',
                      'ABAAA', 'ABABA', 'ABBAA', 'ABBBA',
                      'BAAAA', 'BAABA', 'BABAA', 'BABBA',
                      'BBAAA', 'BBABA', 'BBBAA', 'BBBBA']
-    with open(args.outputfile, 'w') as outfile:
-        outfile.write('#' + '\t'.join(arguments) + '\n')
-        outfile.write('\t'.join(["#chrom", "pos", "total"] +
-                                site_patterns) + "\n")
-#### BEGIN RUNS
+    with open(args.outputfile, 'wb') as outfile:
+        outfile.write(('#{}\n'.format('\t'.join(arguments))).encode('utf-8'))
+        outfile.write(('{}\n'.format(
+            '\t'.join(["#chrom", "pos", "total"] + site_patterns)
+            )).encode('utf-8'))
+    # BEGIN RUNS
     msfilepath = args.msfile and args.msfile or run_ms(vars(args))
     aligns = process_msfile(msfilepath, args.window)
     process_aligns(aligns, vars(args))

@@ -10,11 +10,12 @@ dfoil_analyzed - summary statistics of dfoil output
 If you use this software please cite:
 Pease JB and MW Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny"
-Systematic Biology. Online.
+Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
 
-v.2015-02-07 - Re-release on GitHub
-v.2015-04-28 - Upgrades and Python3 compatibility fixes
+version: 2015-02-07 - Re-release on GitHub
+version: 2015-04-28 - Upgrades and Python3 compatibility fixes
+@versoin: 2015-11-23 - Compatibility and citation update
 
 This file is part of DFOIL.
 
@@ -34,9 +35,10 @@ along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from __future__ import print_function
-from io import open
-import sys, argparse
+import sys
+import argparse
 from numpy import mean, percentile, var, std
+
 
 def printlist(entry, delim="\t", ndigits=3):
     """Print a tab-separated list of items
@@ -105,18 +107,18 @@ def main(arguments=sys.argv[1:]):
             total = len(dstat[i])
             entry = (
                 [(i == 0 and name or statfields[i]),
-                 min(dstat[i]), mean(dstat[i]), max(dstat[i])]
-                + [percentile(dstat[i], x) for x in (5, 25, 60, 75, 95)]
-                + [dstat[i] and var(dstat[i]) or 0,
-                   dstat[i] and std(dstat[i]) or 0,
-                   float(sum([int(abs(x) <= 0.01) for x in dstat[i]])) / total,
-                   float(sum([int(x > 0) for x in dstat[i]])) / total,
-                   float(sum([int(x <= 0.05) for x in dstat[i]])) / total,
-                   float(sum([int(x >= 0.46) for x in dstat[i]])) / total,
-                   float(sum([int(x >= 3.84) for x in dstat[i]])) / total,
-                   float(sum([int(x >= 6.64) for x in dstat[i]])) / total])
+                 min(dstat[i]), mean(dstat[i]), max(dstat[i])] +
+                [percentile(dstat[i], x) for x in (5, 25, 60, 75, 95)] +
+                [dstat[i] and var(dstat[i]) or 0,
+                 dstat[i] and std(dstat[i]) or 0,
+                 float(sum([int(abs(x) <= 0.01) for x in dstat[i]])) / total,
+                 float(sum([int(x > 0) for x in dstat[i]])) / total,
+                 float(sum([int(x <= 0.05) for x in dstat[i]])) / total,
+                 float(sum([int(x >= 0.46) for x in dstat[i]])) / total,
+                 float(sum([int(x >= 3.84) for x in dstat[i]])) / total,
+                 float(sum([int(x >= 6.64) for x in dstat[i]])) / total])
             printlist(entry, ndigits=args.ndigits)
-    print ("\n# Introgression Calls:\n")
+    print("\n# Introgression Calls:\n")
     for (key, value) in iter(introg_call.items()):
         print(key, value)
     return ''

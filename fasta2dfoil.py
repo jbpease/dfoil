@@ -33,7 +33,6 @@ along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from __future__ import print_function
-from io import open
 import sys
 import argparse
 from itertools import groupby
@@ -118,7 +117,7 @@ def main(arguments=None):
             site_count[site_code] = site_count.get(site_code, 0) + 1
 
         with open(args.out, 'a') as outfile:
-            outfile.write("{}\t{}\t{}".format(infilename, position,
+            outfile.write("{}\t{}\t{}\n".format(infilename, position,
                           '\t'.join([str(site_count.get(x, 0))
                                      for x in headers])))
         position += 1
