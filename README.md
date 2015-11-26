@@ -78,6 +78,7 @@ then for each D-statistic:
 * Dxx_stat (D-statistic value)
 * Dxx_chisq (Chi_Squared value)
 * Dxx_pval (Chi_Squared P-value)
+
 -----------------------------------------------------------
 ### Main Options
 `--mincount INT`: mininum number of total pattern counts in the D-statistic denominator (default=10)
