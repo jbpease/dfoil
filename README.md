@@ -2,14 +2,14 @@
 **Software for detection of introgression in a five-taxon symmetric phylogeny** 
 
 ##Author
-**James Pease** - [website](http://pages.iu.edu/~jbpease/) - [@jamesbpease](http://www.twitter.com/jamesbpease/)
+**James Pease** - [website](http://jbpease.github.io) - [@jamesbpease](http://www.twitter.com/jamesbpease/)
 
 ## Citation Information
 If you use this program, please cite:
 ```
 James B Pease, Matthew W. Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny" 
-Systematic Biology.
+Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
 doi: 10.1093/sysbio/syv023
 ```
@@ -17,6 +17,7 @@ doi: 10.1093/sysbio/syv023
 * v. 2014-02-07 Re-release version on GitHub
 * v. 2015-04-17 Minor updates and citation information, Publication Release Version
 * v. 2014-04-28 Fixes for Python3 compatibility
+* v. 2015-11-23 More fixes for Python3 compability, added 'pre-dfoil.py' that checks for issues in count files before running dfoil.py
 
 =======
 
@@ -25,6 +26,9 @@ doi: 10.1093/sysbio/syv023
 * [Scipy](http://www.scipy.org/)
 * [Numpy](http://www.numpy.org/)
 * [matplotlib](http://www.matplotlib.org/)
+
+To run simulations within dfoil_sim.py you will also need:
+* [ms](http://home.uchicago.edu/rhudson1/source/mksamples.htm)
 
 ## Installation
 No installation is necessary, just download dfoil and run scripts through Python.
@@ -52,6 +56,14 @@ for the four-taxon test the patterns are
 
 *Note: these patterns are in 'binary' order 0000, 0010, 0100...*
 
+**IMPORTANT**
+The order of taxa must be P1 P2 P3 P4 O, such that:
+*"O" is the outgroup
+*P1 and P2 are a monophyletic pair of taxa
+*P3 and P4 are a monophyletic pair of taxa
+*P3 and P4 divergence >= P1 and P2 divergence
+(The choice of P1/P2 and P3/P4 within the pairings is arbitrary)
+
 ### Output Format
 One or more output files are specified (equal to number of inputs).
 The outputs will have fields:
@@ -66,6 +78,7 @@ then for each D-statistic:
 * Dxx_stat (D-statistic value)
 * Dxx_chisq (Chi_Squared value)
 * Dxx_pval (Chi_Squared P-value)
+
 -----------------------------------------------------------
 ### Main Options
 `--mincount INT`: mininum number of total pattern counts in the D-statistic denominator (default=10)
