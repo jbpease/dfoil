@@ -68,7 +68,7 @@ INTROGLABELS = {'dfoil': ['N/A', 'None',
 INTROGLABELS['partitioned'] = INTROGPATTERNS['dfoil']
 
 
-SITECODES = dict([(x, "{}{}".format('0' * (7 - len(bin(x))),
+SITECODES = dict([(x, "{}{}".format('A' * (7 - len(bin(x))),
                   str(bin(x))[2:].replace('0', 'A').replace('1', 'B')))
                   for x in range(0, 32, 2)])
 
