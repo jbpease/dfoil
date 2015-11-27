@@ -67,8 +67,9 @@ INTROGLABELS = {'dfoil': ['N/A', 'None',
                           '2$\\Leftrightarrow$3', '1$\\Leftrightarrow$3']}
 INTROGLABELS['partitioned'] = INTROGPATTERNS['dfoil']
 
-SITECODES = dict([(x, str(bin(x))[2:].rjust(
-                     5, '0').replace('0', 'A').replace('1', 'B'))
+
+SITECODES = dict([(x, "{}{}".format('0' * (7 - len(bin(x))),
+                  str(bin(x))[2:].replace('0', 'A').replace('1', 'B')))
                   for x in range(0, 32, 2)])
 
 
@@ -82,7 +83,7 @@ class DataWindow(object):
     def dcalc(self, mincount=0):
         """Calculate D-statistics
             Arguments:
-                mincount: minimuim total count to calculate P-values
+                mincount: minimum total count to calculate P-values
         """
         (beta0, beta1, beta2) = self.meta['beta']
         if self.meta['mode'] == 'dfoil':
