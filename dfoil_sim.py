@@ -184,8 +184,7 @@ def process_aligns(aligns, params):
                     newp = sample(PATTERN_CONVERT[oldp], 1)
                     site_counts[newp] = site_counts.get(newp, 0) + 1
             outfile.write(('\t'.join([
-                str(x) for x in ["SIM{}".format(i), coord_start,
-                                 sum(site_counts.values())] +
+                str(x) for x in ["SIM{}".format(i), coord_start] +
                 [site_counts.get(elem, 0) for elem in range(0, 32, 2)]]) +
                           '\n').encode('utf-8'))
             coord_start += params['window']
@@ -249,7 +248,7 @@ def main(arguments=sys.argv[1:]):
         if which(args.mspath) is None:
             raise RuntimeError("Cannot find 'ms' at path='{}', "
                                "is it installed?".format(
-                args.mspath))
+                                    args.mspath))
     # BEGIN PARAMS
     site_patterns = ['AAAAA', 'AAABA', 'AABAA', 'AABBA',
                      'ABAAA', 'ABABA', 'ABBAA', 'ABBBA',
@@ -258,7 +257,7 @@ def main(arguments=sys.argv[1:]):
     with open(args.outputfile, 'wb') as outfile:
         outfile.write(('#{}\n'.format('\t'.join(arguments))).encode('utf-8'))
         outfile.write(('{}\n'.format(
-            '\t'.join(["#chrom", "pos", "total"] + site_patterns)
+            '\t'.join(["#chrom", "pos"] + site_patterns)
             )).encode('utf-8'))
     # BEGIN RUNS
     msfilepath = args.msfile and args.msfile or run_ms(vars(args))
