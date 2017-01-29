@@ -18,6 +18,7 @@ doi: 10.1093/sysbio/syv023
 * v. 2015-04-17 Minor updates and citation information, Publication Release Version
 * v. 2014-04-28 Fixes for Python3 compatibility
 * v. 2015-11-23 More fixes for Python3 compability, added 'pre-dfoil.py' that checks for issues in count files before running dfoil.py
+* v. 2017-01-29 Fixes for visual graph outputs, `--plot_labels` has been fixed, replaced `colornoanc` and `colornoancdark` with `--plot_noanc` option, changes to color pallette for code comprehension. Replaced `--plot-path` with just `--plot`, and `--plot show` is now deprecated.
 
 =======
 
@@ -35,7 +36,7 @@ No installation is necessary, just download dfoil and run scripts through Python
 Dependencies should be installed according to their individual instructions. 
 
 ## Usage
-`python dfoil.py INPUTFILE1 [, INPUTFILE2...] --out OUTPUTFILE1 [, OUTPUTFILE2]`
+`python dfoil.py --infile INPUTFILE1 [INPUTFILE2 ...] --out OUTPUTFILE1 [OUTPUTFILE2 ...]`
 
 ### Input Format
 One or more input files can be specified.
@@ -104,33 +105,32 @@ then for each D-statistic:
 * dstatalt: 1,1,N/A (no triple-B);
 * partitioned: N/A (does not use weighting parameters);
 
-` --plot_mode {none (default), write, show}`: show = show DFOIL/Dstat graph interactively, write = write to file(s) as specified 
-	   
-### Additional Plotting Options:
+### Plotting Options:
 
-`--plot_path PLOTFILE1 [, PLOTFILE2, ...]`: One or more plot file paths (PNG format, must use "--plot_mode write")
+`--plot PLOTFILE1 [PLOTFILE2 ...]`: Turns on plotting, outputs to one or more space-separated plot file paths (path extensions used to determine plot file format)
 
-`--plot_labels LABEL1 [, LABEL2, ...]`: Labels for the figure key in the order P1, P2, P3, P4
+`--plot_labels LABEL1 LABEL2 LABEL3 LABEL4`: Space-separated Labels for the figure key in the order P1 P2 P3 P4 (use only 3 for `--mode dstat` or `dstatalt` )
 
-`--plot_color {color, dark, colornoanc, darknoanc, bw}`:
+`--plot_color {color,dark,bw,bwdark}`:
 
 * color: standard full color plot
 * colordark: standard plot with dark background and light text
-* colornoanc/colornoancdark: color or dark plot without ancestral introgression shown
-* bw: greyscale plot 
-* bwdark: black background greyscale plot
+* bw: grayscale plot 
+* bwdark: greyscale plot with dark background and light text
+
+`--plot_noanc`: boolean to remove ancestral introgressions background coloring and removes from key
 
 `--plot_yscale FLOAT`: max value of y-axis (default = 1), y-min is complementary value (default = -1)
 
 `--plot_smooth INT`: number of windows to average DFOIL statistics over for the plot (default = none)
 
-`--plot_totals`: add a grey background plot of the total site pattern counts for each window
+`--plot_totals`: boolean to add a grey background plot of the total site pattern counts for each window
 
-`--plot_hidekey`: hide the key in the plot (useful for making your own figures for publication, when fonts need to conform)
+`--plot_hidekey`: boolean to hide the key in the plot (useful for making your own figures for publication, when fonts need to conform)
 
-`--plot_hideaxes`: hide the axis labels and numbers
+`--plot_hideaxes`: boolean to hide the axis labels and numbers
 
-`--plot_lineweight`: weight of lines in plot (in pt, default=1.0)
+`--plot_lineweight FLOAT`: weight of lines in plot (in pt, default=1.0)
 
 `--plot_height FLOAT`: height of plot (in cm)
 

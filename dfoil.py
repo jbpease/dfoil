@@ -19,6 +19,8 @@ version 2015-05-26 - Minor fix to output file writing
 version 2015-09-05 - Minor fix for Python 3.x compatibility
 version 2015-09-14 - Change to input specification, allow characters for zeros
 @version 2015-11-23 - Minor compatibility fix, updated citation
+@version 2017-01-29 - Minor fixes to graphical interface, colormode changes
+
 
 This file is part of DFOIL.
 
@@ -209,6 +211,55 @@ class DataWindow(object):
         return ''
 
 
+class ColorPallette(object):
+    """Plotting Line and Background colors for Various Modes"""
+
+    def __init__(self, colormode='color', linealpha=1, bgalpha=0.3):
+        self.plotcolors = {'bg': 'w', 'fg': 'k','alpha': bgalpha}
+        if colormode in ["colordark", "bwdark"]:
+            self.plotcolors = {'bg': 'k', 'fg': 'w','alpha': bgalpha}
+        if colormode in ["color", "colordark"]:
+            self.linecolors = [[(r, g, b, linealpha), '-'] for (r, g, b) in
+                               [(0.11, 0.62, 0.47),
+                                (0.85, 0.37, 0.00),
+                                (0.46, 0.44, 0.70),
+                                (0.91, 0.16, 0.54)]]
+        if colormode == "color":
+            self.bincolors = [(0.60, 0.96, 0.85, bgalpha),
+                              (0.99, 0.55, 0.38, bgalpha),
+                              (0.50, 0.50, 0.90, bgalpha),
+                              (1.00, 0.65, 0.86, bgalpha),
+                              (0.20, 0.56, 0.45, bgalpha),
+                              (0.69, 0.25, 0.08, bgalpha),
+                              (0.35, 0.35, 0.80, bgalpha),
+                              (0.71, 0.35, 0.56, bgalpha),
+                              (0.20, 0.20, 0.20, bgalpha),
+                              (0.70, 0.70, 0.70, bgalpha)]
+        elif colormode == "colordark":
+            self.bincolors = [(0.40, 0.76, 0.65, bgalpha),
+                              (0.99, 0.55, 0.38, bgalpha),
+                              (0.55, 0.63, 0.80, bgalpha),
+                              (0.91, 0.54, 0.76, bgalpha),
+                              (0.65, 0.85, 0.33, bgalpha),
+                              (1.00, 0.85, 0.18, bgalpha),
+                              (0.90, 0.77, 0.58, bgalpha),
+                              (0.70, 0.70, 0.70, bgalpha),
+                              (0.87, 0.80, 0.47, bgalpha),
+                              (0.79, 0.70, 0.84, bgalpha)]
+        if colormode == "bw":
+            self.linecolors = [[(0.0, 0.0, 0.0, 1.0), "-"],
+                               [(0.0, 0.0, 0.0, 1.0), "--"],
+                               [(0.6, 0.6, 0.6, 1.0), "-"],
+                               [(0.6, 0.6, 0.6, 1.0), "--"]]
+            self.bincolors = [(0, 0, 0, x) for x in [0.1] * 10]
+        elif colormode == 'bwdark':
+            self.linecolors = [[(1.0, 1.0, 1.0, 1.0), "-"],
+                               [(1.0, 1.0, 1.0, 1.0), "--"],
+                               [(0.6, 0.6, 0.6, 1.0), "-"],
+                               [(0.6, 0.6, 0.6, 1.0), "--"]]
+            self.bincolors = [(0.9, 0.9, 0.9, x) for x in [0.1] * 10]
+
+
 def dcrunch(left_term, right_term, mincount=0):
     """Calculate D-statistic
         Arguments:
@@ -235,7 +286,6 @@ def dcrunch(left_term, right_term, mincount=0):
         result['Pvalue'] = pval
         result['D'] = (float(left_term - right_term) /
                        (left_term + right_term))
-
     return result
 
 
@@ -252,7 +302,7 @@ def chi2_test(val0, val1):
             return (0, 1)
         pval = 1.0 - chi2.cdf(chisq, 1)
         return (chisq, pval)
-    except ZeroDivisionError as errstr:
+    except ZeroDivisionError as _:
         return (0, 1)
 
 
@@ -271,47 +321,7 @@ def make_header(mode):
                    'stat', 'chisq', 'Pvalue')] +
         ['introgression'] +
         ['introg{}'.format(x) for x in INTROGPATTERNS[mode]]))
-        ).encode('utf-8')
-
-
-def plot_colors(colormode="color", linealpha=1, bgalpha=0.7):
-    """Generate Plotting Line and Background Colors for Various Modes"""
-    if colormode in ["color", "colornoanc"]:
-        dstat_colors = [[(r, g, b, linealpha), '-'] for (r, g, b) in
-                        [(0.11, 0.62, 0.47), (0.85, 0.37, 0),
-                         (0.46, 0.44, 0.70), (0.91, 0.16, 0.54)]]
-        bin_colors = [(0.60, 0.96, 0.85, bgalpha), (0.99, 0.55, 0.38, bgalpha),
-                      (0.5, 0.5, 0.90, bgalpha), (1.0, 0.65, 0.86, bgalpha),
-                      (0.20, 0.56, 0.45, bgalpha), (0.69, 0.25, 0.08, bgalpha),
-                      (0.35, 0.35, 0.80, bgalpha), (0.71, 0.35, 0.56, bgalpha),
-                      (0.2, 0.2, 0.2, bgalpha), (0.7, 0.7, 0.7, bgalpha)]
-        bgcolors = ['w', 'k', bgalpha]
-    elif colormode in ["colordark", "colornoancdark"]:
-        bgalpha = bgalpha != 0 and 1 - bgalpha or 0
-        dstat_colors = [[(r, g, b, linealpha), '-'] for (r, g, b) in
-                        [(0.11, 0.62, 0.47), (0.85, 0.37, 0.00),
-                         (0.46, 0.44, 0.70), (0.91, 0.16, 0.54)]]
-        bgcolors = ['k', 'w', bgalpha]
-        bin_colors = [(0.40, 0.76, 0.65, bgalpha), (0.99, 0.55, 0.38, bgalpha),
-                      (0.55, 0.63, 0.80, bgalpha), (0.91, 0.54, 0.76, bgalpha),
-                      (0.65, 0.85, 0.33, bgalpha), (1.00, 0.85, 0.18, bgalpha),
-                      (0.90, 0.77, 0.58, bgalpha), (0.70, 0.70, 0.70, bgalpha),
-                      (0.87, 0.80, 0.47, bgalpha), (0.79, 0.70, 0.84, bgalpha)]
-
-    elif colormode == "bw":
-        dstat_colors = [[(0, 0, 0, 1), "-"], [(0, 0, 0, 1), "--"],
-                        [(0.6, 0.6, 0.6, 1), "-"], [(0.6, 0.6, 0.6, 1), "--"]]
-        bgcolors = ['w', 'k', bgalpha]
-        bin_colors = [(0, 0, 0, x) for x in [0.1]*10]
-    elif colormode == "bwdark":
-        dstat_colors = [[(1, 1, 1, 1), "-"], [(1, 1, 1, 1), "--"],
-                        [(0.6, 0.6, 0.6, 1), "-"], [(0.6, 0.6, 0.6, 1), "--"]]
-        bgcolors = ['k', 'w', bgalpha]
-        bin_colors = [(0.9, 0.9, 0.9, x) for x in [0.1]*10]
-    if colormode in ["colornoanc", "colornoancdark"]:
-        bin_colors[8] = (0, 0, 0, 0)
-        bin_colors[9] = (0, 0, 0, 0)
-    return (dstat_colors, bin_colors, bgcolors)
+           ).encode('utf-8')
 
 
 def plot_dfoil(path, params, window_data, bool_data):
@@ -330,14 +340,14 @@ def plot_dfoil(path, params, window_data, bool_data):
     if params['plot_labels']:
         for i, elem in enumerate(introgression_labels):
             for (j, label) in enumerate(params['plot_labels']):
-                introgression_labels[i] = (elem.replace(str(j+1), label))
+                introgression_labels[i] = (
+                    introgression_labels[i].replace(str(j+1), label))
     for i, elem in enumerate(introgression_labels):
         if '+' in elem:
             introgression_labels[i] = elem.replace('$\\Rightarrow$',
                                                    '$\\Leftrightarrow$')
     # Establish Colors
-    (dstat_colors, bin_colors,
-     bgcolors) = plot_colors(colormode=params['plot_color'],
+    pallette = ColorPallette(colormode=params['plot_color'],
                              bgalpha=params['plot_background'])
     # Calcuate plot values
     xdstat = [int(window.meta['position']) for window in window_data]
@@ -351,9 +361,8 @@ def plot_dfoil(path, params, window_data, bool_data):
         xdstat = xdstat[::params['plot_smooth']]
     xbin = [int(window.meta['position']) for window in window_data]
     if params['plot_color'] == 'bw':
-        if params['mode'] == 'dstat':
-            binplot = [int('1' in bool_data[x][2:]) * 10000 - 5000
-                       for x in range(len(bool_data))]
+        binplots = [[int('1' in bool_data[x][2:]) * 10000 - 5000
+                    for x in range(len(bool_data))]]
     else:
         binplots = [[int(window[x])*10000 - 5000 for window in bool_data]
                     for x in range(2, len(bool_data[0]))]
@@ -370,36 +379,35 @@ def plot_dfoil(path, params, window_data, bool_data):
     if params['plot_totals']:
         par1 = host.twinx()
     for i, dplot in enumerate(dplots):
-        dashlen = dstat_colors[i][1] == '--' and (2, 2) or ''
+        dashlen = (2, 2) if pallette.linecolors[i][1] == '--' else ''
         if params['mode'] == 'dstat' and params['plot_color'] == 'bw':
             dlabels = params['plot_labels'] or ['$P+1$', '$P_2$', '$P_3$']
-            host.plot(xdstat, dplot, color=dstat_colors[i][0],
+            host.plot(xdstat, dplot, color=pallette.linecolors[i][0],
                       linewidth=params['plot_lineweight'],
-                      linestyle=dstat_colors[i][1], dashes=dashlen,
+                      linestyle=pallette.linecolors[i][1], dashes=dashlen,
                       label=(("$D(+)$={}$\\Leftrightarrow${};"
                               "  $D(-)$={}{}$\\Leftrightarrow${}").format(
-                          dlabels[2], dlabels[1], dlabels[1], dlabels[2],
-                          dlabels[0])),
+                                  dlabels[2], dlabels[1], dlabels[1],
+                                  dlabels[2], dlabels[0])),
                       drawstyle="steps-pre")
         else:
-            host.plot(xdstat, dplot, color=dstat_colors[i][0],
+            host.plot(xdstat, dplot, color=pallette.linecolors[i][0],
                       linewidth=params['plot_lineweight'],
-                      linestyle=dstat_colors[i][1], dashes=dashlen,
+                      linestyle=pallette.linecolors[i][1], dashes=dashlen,
                       label=("$" + dstat_names[i][0] + "_{" +
                              dstat_names[i][1:] + "}$"),
                       drawstyle="steps-pre")
     if params['plot_background']:
-        if params['plot_color'] == 'bw':
-            host.fill_between(xbin, binplot, -1, edgecolor='none',
-                              facecolor=(0.7, 0.7, 0.7,
-                                         params['plot_background']),
-                              label=("Significant (P<{})").format(
-                                  params['pvalue'][0]))
-        else:
-            for i, binplot in enumerate(binplots):
-                host.fill_between(xbin, binplot, -1, edgecolor='none',
-                                  facecolor=bin_colors[i],
-                                  label=(introgression_labels[i+2]))
+        for i, binplot in enumerate(
+                binplots[:params['plot_noanc'] and -2 or None]):
+            host.fill_between(
+                xbin, binplot, -1, edgecolor='none',
+                facecolor=(params['plot_color'] == 'bw' and
+                           (0.7, 0.7, 0.7, params['plot_background']) or
+                           pallette.bincolors[i]),
+                label=(params['plot_color'] == 'bw' and
+                       "Significant (P<{})".format(params['pvalue'][0]) or
+                       introgression_labels[i+2]))
     host.set_ylim(-1 * params['plot_yscale'], params['plot_yscale'])
     if params['plot_totals']:
         par1.fill_between(xdstat, y1=totalplot, y2=0, facecolor=(0, 0, 0, 0.5),
@@ -407,7 +415,7 @@ def plot_dfoil(path, params, window_data, bool_data):
         par1.set_ylim(0, max(totalplot) * 5)
         par1.set_ylabel("Total Count of Sites")
     host.set_xlim(xmin=min(xbin), xmax=max(xbin))
-    host.set_axis_bgcolor(bgcolors[0])
+    host.set_axis_bgcolor(pallette.plotcolors['bg'])
     host.tick_params(direction="in", length=5, width=0.5)
     if params['plot_hideaxes']:
         host.set_xticklabels([], visible=False)
@@ -418,21 +426,20 @@ def plot_dfoil(path, params, window_data, bool_data):
         host.set_ylabel("$D$")
     fig.patch.set_alpha(0.0)
     if not params['plot_hidekey']:
-        leg = host.legend(loc=9, ncol=7)
+        leg = host.legend(loc=9, ncol=7 - int(params['plot_noanc']))
         leg.get_frame()
         if params['plot_background']:
             for label in leg.get_texts():
                 label.set_fontsize(10)
-                label.set_color(bgcolors[1])
+                label.set_color(pallette.plotcolors['fg'])
             for i, patch in enumerate(leg.get_patches()):
-                patch.set_alpha(bin_colors[i][3])
-    host.axhline(y=0, color=bgcolors[1], linewidth=0.5)
+                patch.set_alpha(pallette.bincolors[i][3])
+        leg.get_frame().set_facecolor(pallette.plotcolors['bg'])
+        leg.get_frame().set_edgecolor(pallette.plotcolors['fg'])
+    host.axhline(y=0, color=pallette.plotcolors['fg'], linewidth=0.5)
     for axis in ['top', 'bottom', 'left', 'right']:
         host.spines[axis].set_linewidth(0.5)
-    if not path:
-        plt.show()
-    else:
-        plt.savefig(path)
+    plt.savefig(path)
     return ''
 
 
@@ -472,9 +479,9 @@ def main(arguments=sys.argv[1:]):
     Calculate DFOIL and D-statistics stats from one or more count files.
     USAGE: dfoiler.py INPUTFILE1 ... --out OUTPUTFILE1 ..."""))
     parser.add_argument('--infile', help="input tab-separated counts file",
-                        nargs='*', required=True)
+                        nargs='+')
     parser.add_argument('--out', help="outputs tab-separated DFOIL stats",
-                        nargs='*', required=True)
+                        nargs='+')
     parser.add_argument('--mincount', type=int, default=10,
                         help="minium number of D denominator sites per window")
     parser.add_argument("--mintotal", type=int, default=50,
@@ -513,20 +520,16 @@ def main(arguments=sys.argv[1:]):
     parser.add_argument("--zerochar", default=[".", "NA"], nargs='*',
                         help="""list of strings used in place of zeros
                                 in the input file default is [".", "NA"]""")
-    parser.add_argument("--plot", choices=["show", "write", "none"],
-                        default="none",
-                        help="""show=interactive,
-                                write=write to file (--plot_path)
-                                or none=no plot""")
-    parser.add_argument("--plot_path",
-                        help="output filepath for plot",
-                        nargs='*')
-    parser.add_argument('--plot_labels', nargs='*', help="taxon labels")
-    parser.add_argument('--plot_color', default="color",
+    parser.add_argument("--plot", nargs='*',
+                        help="""write plot to file path(s) given""")
+    parser.add_argument("--plot_labels", nargs='*', help="taxon labels")
+    parser.add_argument("--plot_color", default="color",
                         choices=["color", "colordark",
-                                 "bw", "bwdark",
-                                 "colornoanc", "colornoancdark"],
+                                 "bw", "bwdark"],
                         help="""choose color mode""")
+    parser.add_argument("--plot_noanc", action="store_true",
+                        help="""do not plot background for
+                                ancestral introgression""")
     parser.add_argument("--plot_lineweight", type=float, default=1.,
                         help="line weight for dplots (default=1pt)")
     parser.add_argument("--plot_yscale", type=float, default=1.0,
@@ -534,7 +537,8 @@ def main(arguments=sys.argv[1:]):
     parser.add_argument("--plot_smooth", type=int,
                         help="average D-stats over this number of points")
     parser.add_argument("--plot_background", type=float, default=0.3,
-                        help="0-1.0 background intensity, default = 0.3")
+                        help="""0-1.0 background intensity
+                                (0=none, default=0.3)""")
     parser.add_argument("--plot_totals", action="store_true",
                         help="add a background plot of total site counts")
     parser.add_argument("--plot_hidekey", action="store_true",
@@ -549,29 +553,31 @@ def main(arguments=sys.argv[1:]):
                         help="display version information and quit")
     args = parser.parse_args(args=arguments)
     if args.version:
-        print("2015-11-23")
+        print("2017-01-29")
         sys.exit()
     # ===== INITIALIZE =====
     if not args.out:
         raise RuntimeError("--out path not specified")
-    if args.plot_path:
-        if set(args.infile) & set(args.plot_path):
-            raise NameError("plot_path same as infile path")
-        for filepath in args.plot_path:
+    if args.plot:
+        if set(args.infile) & set(args.plot):
+            raise NameError("plot same as infile path")
+        for filepath in args.plot:
             if not any(filepath.endswith(x) for x in PLOTFORMATS):
                 raise NameError(
                     "{} does not end in one of these: {}".format(
                         filepath, PLOTFORMATS))
+    if args.plot_labels:
+        if args.mode in ['dstat', 'dstatalt'] and len(args.plot_labels) != 3:
+            raise RuntimeError("--plot_labels must have 3 arguments")
+        elif len(args.plot_labels) != 4:
+            raise RuntimeError("--plot_labels must have 4 arguments")
     if set(args.infile) & set(args.out):
         raise NameError("input and output file have same path")
-    if args.plot == 'write' and not args.plot_path:
-        raise NameError(
-            "write mode specified for plot but --plot_path not specified")
     if len(args.pvalue) == 1:
         args.pvalue = [args.pvalue[0], args.pvalue[0]]
     # Set beta parameters for presets
     if not args.beta1:
-        args.beta1 = args.mode in ['dfoil', 'dstatalt'] and 1. or 0.
+        args.beta1 = 1.0 if args.mode in ['dfoil', 'dstatalt'] else 0.
     if not args.beta2:
         args.beta2 = 1.
     if not args.beta3:
@@ -639,9 +645,10 @@ def main(arguments=sys.argv[1:]):
                 entry.extend(bool_flags)
                 outfile.write(('\t'.join(entry) + '\n').encode('utf-8'))
         # ==== PLOT GRAPHS =====
-        if args.plot != "none":
-            plot_dfoil(args.plot == 'write' and args.plot_path[ifile] or '',
-                       vars(args), window_data, bool_data)
+        if ifile < len(args.plot):
+            plot_dfoil(args.plot[ifile], vars(args), window_data, bool_data)
     return ''
+
+
 if __name__ == "__main__":
     main()
