@@ -23,10 +23,10 @@ doi: 10.1093/sysbio/syv023
 =======
 
 ## Requirements:
-* Python 2.7+ or 3.x
+* Python 2.7.x or 3.x
 * [Scipy](http://www.scipy.org/)
 * [Numpy](http://www.numpy.org/)
-* [matplotlib](http://www.matplotlib.org/)
+* [matplotlib](http://www.matplotlib.org/) version 1.5.3 or above
 
 To run simulations within dfoil_sim.py you will also need:
 * [ms](http://home.uchicago.edu/rhudson1/source/mksamples.htm)
