@@ -215,9 +215,9 @@ class ColorPallette(object):
     """Plotting Line and Background colors for Various Modes"""
 
     def __init__(self, colormode='color', linealpha=1, bgalpha=0.3):
-        self.plotcolors = {'bg': 'w', 'fg': 'k','alpha': bgalpha}
+        self.plotcolors = {'bg': 'w', 'fg': 'k', 'alpha': bgalpha}
         if colormode in ["colordark", "bwdark"]:
-            self.plotcolors = {'bg': 'k', 'fg': 'w','alpha': bgalpha}
+            self.plotcolors = {'bg': 'k', 'fg': 'w', 'alpha': bgalpha}
         if colormode in ["color", "colordark"]:
             self.linecolors = [[(r, g, b, linealpha), '-'] for (r, g, b) in
                                [(0.11, 0.62, 0.47),
@@ -645,8 +645,10 @@ def main(arguments=sys.argv[1:]):
                 entry.extend(bool_flags)
                 outfile.write(('\t'.join(entry) + '\n').encode('utf-8'))
         # ==== PLOT GRAPHS =====
-        if ifile < len(args.plot):
-            plot_dfoil(args.plot[ifile], vars(args), window_data, bool_data)
+        if args.plot:
+            if ifile < len(args.plot):
+                plot_dfoil(args.plot[ifile], vars(args),
+                           window_data, bool_data)
     return ''
 
 
