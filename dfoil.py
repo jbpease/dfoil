@@ -2,25 +2,29 @@
 # -*- coding: utf-8 -*-
 """
 DFOIL: Directional introgression testing a five-taxon phylogeny
+dfoil - Calculate DFOIL and D-statistics stats from one or more count files.
+James B. Pease
 http://www.github.com/jbpease/dfoil
 
-dfoil - main introgression testing script
-@author: James B. Pease
+USAGE: dfoil.py INPUTFILE1 ... --out OUTPUTFILE1 ...
+"""
 
+from __future__ import print_function, unicode_literals
+import sys
+import argparse
+from warnings import warn
+from numpy import mean
+from scipy.stats import chi2
+import matplotlib
+from precheck import pre_check
+
+
+_LICENSE = """
 If you use this software please cite:
 Pease JB and MW Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny"
 Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
-
-version 2015-02-07 - Re-release on GitHub
-version 2015-04-28 - Upgrades and Python3 compatibility fixes
-version 2015-05-26 - Minor fix to output file writing
-version 2015-09-05 - Minor fix for Python 3.x compatibility
-version 2015-09-14 - Change to input specification, allow characters for zeros
-@version 2015-11-23 - Minor compatibility fix, updated citation
-@version 2017-01-29 - Minor fixes to graphical interface, colormode changes
-
 
 This file is part of DFOIL.
 
@@ -37,14 +41,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-from __future__ import print_function, unicode_literals
-import sys
-import argparse
-from warnings import warn
-from numpy import mean
-from scipy.stats import chi2
-import matplotlib
 
 
 SIGNCODES = {'dfoil': {'+++0': 2, '--0+': 3, '++-0': 4, '--0-': 5,
@@ -302,7 +298,7 @@ def chi2_test(val0, val1):
             return (0, 1)
         pval = 1.0 - chi2.cdf(chisq, 1)
         return (chisq, pval)
-    except ZeroDivisionError as _:
+    except ZeroDivisionError as exc:
         return (0, 1)
 
 
@@ -399,7 +395,7 @@ def plot_dfoil(path, params, window_data, bool_data):
                       drawstyle="steps-pre")
     if params['plot_background']:
         for i, binplot in enumerate(
-                binplots[:params['plot_noanc'] and -2 or None]):
+                binplots[:(-2 if params['plot_noanc'] else None)]):
             host.fill_between(
                 xbin, binplot, -1, edgecolor='none',
                 facecolor=(params['plot_color'] == 'bw' and
@@ -473,15 +469,16 @@ def fill_windows(window_data, run_length):
     return window_data
 
 
-def main(arguments=sys.argv[1:]):
-    """Main dfoil method"""
-    parser = argparse.ArgumentParser(description=("""
-    Calculate DFOIL and D-statistics stats from one or more count files.
-    USAGE: dfoiler.py INPUTFILE1 ... --out OUTPUTFILE1 ..."""))
+def generate_argparser():
+    parser = argparse.ArgumentParser(
+        prog="dfoil.py",
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        epilog=_LICENSE)
     parser.add_argument('--infile', help="input tab-separated counts file",
-                        nargs='+')
+                        nargs='+', required=True)
     parser.add_argument('--out', help="outputs tab-separated DFOIL stats",
-                        nargs='+')
+                        nargs='+', required=True)
     parser.add_argument('--mincount', type=int, default=10,
                         help="minium number of D denominator sites per window")
     parser.add_argument("--mintotal", type=int, default=50,
@@ -510,10 +507,10 @@ def main(arguments=sys.argv[1:]):
                         help="""beta1 coefficient for single-B patterns,
                                  defaults: DFOIL/Dstatalt=1.0,
                                  DFOILalt,Dstat=0,Dpart=N.A.""")
-    parser.add_argument("--beta2", type=float,
+    parser.add_argument("--beta2", type=float, default=1.0,
                         help="""beta2 coefficient for double-B patterns,
                                 defaults: Dpart=N.A., others=1.0""")
-    parser.add_argument("--beta3", type=float,
+    parser.add_argument("--beta3", type=float, default=1.0,
                         help="""beta3 coefficient for triple-B patterns
                                 defaults: DFOIL/DFOILalt=1.0,
                                 Dstat/Dpart=N.A.""")
@@ -549,21 +546,32 @@ def main(arguments=sys.argv[1:]):
                         help="height of plot (in cm)")
     parser.add_argument("--plot_width", type=float, default=24.,
                         help="width of plot (in cm)")
-    parser.add_argument("--version", action="store_true",
+    parser.add_argument("--pre-check-only", action="store_true",
+                        help=("Only run the data pre-check "
+                              "(formely pre-dfoil.py)"))
+    parser.add_argument("--skip-pre-check", action="store_true",
+                        help=("Skip running the data pre-check "
+                              "(formely pre-dfoil)"))
+    parser.add_argument("--version", action="version", version="2017-06-14",
                         help="display version information and quit")
+    return parser
+
+
+def main(arguments=None):
+    """Main method"""
+    arguments = arguments if arguments is not None else sys.argv[1:]
+    parser = generate_argparser()
     args = parser.parse_args(args=arguments)
-    if args.version:
-        print("2017-01-29")
-        sys.exit()
     # ===== INITIALIZE =====
-    if not args.out:
-        raise RuntimeError("--out path not specified")
+    if set(args.infile) & set(args.out):
+        raise NameError("input and output file have same path")
     if args.plot:
         if set(args.infile) & set(args.plot):
-            raise NameError("plot same as infile path")
+            raise RuntimeError(
+                "ERROR: Plot file path is the same as infile path")
         for filepath in args.plot:
             if not any(filepath.endswith(x) for x in PLOTFORMATS):
-                raise NameError(
+                raise RuntimeError(
                     "{} does not end in one of these: {}".format(
                         filepath, PLOTFORMATS))
     if args.plot_labels:
@@ -571,22 +579,47 @@ def main(arguments=sys.argv[1:]):
             raise RuntimeError("--plot_labels must have 3 arguments")
         elif len(args.plot_labels) != 4:
             raise RuntimeError("--plot_labels must have 4 arguments")
-    if set(args.infile) & set(args.out):
-        raise NameError("input and output file have same path")
     if len(args.pvalue) == 1:
         args.pvalue = [args.pvalue[0], args.pvalue[0]]
     # Set beta parameters for presets
-    if not args.beta1:
+    if args.beta1 is None:
         args.beta1 = 1.0 if args.mode in ['dfoil', 'dstatalt'] else 0.
-    if not args.beta2:
-        args.beta2 = 1.
-    if not args.beta3:
-        args.beta3 = 1.
     if args.mode == 'dstatalt':
         args.mode = 'dstat'
     elif args.mode == 'dfoilalt':
         args.mode = 'dfoil'
-    # ===== PARSE COUNT FILE  =====
+    # ===== DATA PRE-CHECK =====
+    if args.skip_pre_check is False:
+        for ifile, infilename in enumerate(args.infile):
+            print("Running pre-check on {}".format(infilename))
+            window_data = []
+            with open(infilename) as infile:
+                for line in infile:
+                    if line[0] == '#':
+                        continue
+                    try:
+                        arr = line.rstrip().split()
+                        window = DataWindow(meta=dict(
+                            chrom=arr[0], position=int(arr[1]),
+                            mode=args.mode,
+                            beta=(args.beta1, args.beta2, args.beta3)))
+                        window.counts = dict([
+                            ((j - 2) * 2,
+                             int(arr[j]) if arr[j] not in args.zerochar else 0)
+                            for j in range(
+                                2, 9 if args.mode == "dstat" else 18)])
+                        if sum(window.counts.values()) < args.mintotal:
+                            continue
+                        window.meta['total'] = sum(window.counts.values())
+                        window_data.append(window)
+                    except Exception as exc:
+                        warn(
+                            "line invalid, skipping...\n{}".format(line))
+                        continue
+                    pre_check(window_data, mode=args.mode)
+    if args.pre_check_only is True:
+        sys.exit()
+    # ===== MAIN DFOIL CALC =========
     for ifile, infilename in enumerate(args.infile):
         window_data = []
         with open(infilename) as infile:
@@ -599,23 +632,17 @@ def main(arguments=sys.argv[1:]):
                         chrom=arr[0], position=int(arr[1]),
                         mode=args.mode,
                         beta=(args.beta1, args.beta2, args.beta3)))
-                    if args.mode in ["dfoil", "partitioned"]:
-                        window.counts = dict([
-                            (j - 2) * 2,
-                            arr[j] not in args.zerochar and int(arr[j]) or 0]
-                                             for j in range(2, 18))
-                    elif args.mode == 'dstat':
-                        window.counts = dict([
-                            (j - 2) * 2,
-                            arr[j] not in args.zerochar and int(arr[j]) or 0]
-                                             for j in range(2, 9))
+                    window.counts = dict([
+                        ((j - 2) * 2,
+                         int(arr[j]) if arr[j] not in args.zerochar else 0)
+                        for j in range(2, 9 if args.mode == "dstat" else 18)])
                     if sum(window.counts.values()) < args.mintotal:
                         continue
                     window.meta['total'] = sum(window.counts.values())
                     window.dcalc(mincount=args.mincount)
                     window.calc_signature(pvalue_cutoffs=args.pvalue)
                     window_data.append(window)
-                except:
+                except Exception as exc:
                     warn(
                         "line invalid, skipping...\n{}".format(line))
                     continue

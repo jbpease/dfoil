@@ -2,20 +2,24 @@
 # -*- coding: utf-8 -*-
 """
 DFOIL: Directional introgression testing a five-taxon phylogeny
-http://www.github.com/jbpease/dfoil
-
 dfoil_sim - simulation of sequences for testing dfoil
-@author: James B. Pease
+James B. Pease
+http://www.github.com/jbpease/dfoil
+"""
 
+from __future__ import print_function, unicode_literals
+import sys
+import os
+import argparse
+import subprocess
+from random import sample
+
+_LICENSE = """
 If you use this software please cite:
 Pease JB and MW Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny"
 Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
-
-version=2015-02-07 - Re-release on GitHub
-version=2015-04-28 - Upgrades and Python3 compatibility fixes
-@version=2015-11-23 - Minor compatibility fix and citation update
 
 This file is part of DFOIL.
 
@@ -32,13 +36,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-from __future__ import print_function, unicode_literals
-import sys
-import os
-import argparse
-import subprocess
-from random import sample
 
 PATTERN_CONVERT = {
     2: (6, 10, 18),
@@ -191,12 +188,13 @@ def process_aligns(aligns, params):
     return ''
 
 
-def main(arguments=sys.argv[1:]):
-    """Main function for dfoil simulator"""
-    parser = argparse.ArgumentParser(description="""dfoil_sim: simulates
-    sequences using ms for testing DFOIL and other D-statistics
-    """)
-    parser.add_argument("outputfile",
+def generate_argparser():
+    parser = argparse.ArgumentParser(
+        prog="dfoil_sim.py",
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        epilog=_LICENSE)
+    parser.add_argument("outputfile", type=os.path.abspath,
                         help=" output site count filename")
     parser.add_argument("--msfile", help="""use pre-computed ms output
                                              file instead of running ms.""")
@@ -233,12 +231,16 @@ def main(arguments=sys.argv[1:]):
                         help="number of convergent sites per window")
     parser.add_argument("--quiet", action='store_true',
                         help='suppress screen output')
-    parser.add_argument("--version", action="store_true",
+    parser.add_argument("--version", action="version", version="2017-06-14",
                         help="display version information and quit")
+    return parser
+
+
+def main(arguments=None):
+    """Main method"""
+    arguments = arguments if arguments is not None else sys.argv[1:]
+    parser = generate_argparser()
     args = parser.parse_args(args=arguments)
-    if args.version:
-        print("2015-11-23")
-        sys.exit()
     if args.rho and args.recomb:
         raise RuntimeError("Cannot use both --rho and --recomb")
     if args.mtimes:

@@ -2,20 +2,23 @@
 # -*- coding: utf-8 -*-
 """
 DFOIL: Directional introgression testing a five-taxon phylogeny
+dfoil_analyze: Given a dfoil output file, gives summary statistics to stdout
+James B. Pease
 http://www.github.com/jbpease/dfoil
+"""
 
-dfoil_analyzed - summary statistics of dfoil output
-@author: James B. Pease
+from __future__ import print_function
+import sys
+import argparse
+from numpy import mean, percentile, var, std
 
+
+_LICENSE = """
 If you use this software please cite:
 Pease JB and MW Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny"
 Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
-
-version: 2015-02-07 - Re-release on GitHub
-version: 2015-04-28 - Upgrades and Python3 compatibility fixes
-@versoin: 2015-11-23 - Compatibility and citation update
 
 This file is part of DFOIL.
 
@@ -32,12 +35,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-
-from __future__ import print_function
-import sys
-import argparse
-from numpy import mean, percentile, var, std
 
 
 def printlist(entry, delim="\t", ndigits=3):
@@ -62,14 +59,22 @@ def printlist(entry, delim="\t", ndigits=3):
     print(delim.join(["{}".format(x) for x in newlist]))
 
 
-def main(arguments=sys.argv[1:]):
-    """Main dfoil_analyze method"""
-    parser = argparse.ArgumentParser(description="""
-    Given a dfoil output file, gives summary statistics to stdout
-    """)
+def generate_argparser():
+    parser = argparse.ArgumentParser(
+        prog="dfoil_analyze.py",
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        epilog=_LICENSE)
     parser.add_argument("infile", help="dfoil output file")
     parser.add_argument("--ndigits", type=int, default=3,
                         help="number of decimal places")
+    return parser
+
+
+def main(arguments=None):
+    """Main method"""
+    arguments = arguments if arguments is not None else sys.argv[1:]
+    parser = generate_argparser()
     args = parser.parse_args(args=arguments)
     dfo = [[], [], []]
     dil = [[], [], []]
@@ -106,7 +111,7 @@ def main(arguments=sys.argv[1:]):
         for i in range(len(dstat)):
             total = len(dstat[i])
             entry = (
-                [(i == 0 and name or statfields[i]),
+                [(name if i == 0 else statfields[i]),
                  min(dstat[i]), mean(dstat[i]), max(dstat[i])] +
                 [percentile(dstat[i], x) for x in (5, 25, 60, 75, 95)] +
                 [dstat[i] and var(dstat[i]) or 0,

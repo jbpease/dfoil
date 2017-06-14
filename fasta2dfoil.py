@@ -2,19 +2,28 @@
 # -*- coding: utf-8 -*-
 """
 DFOIL: Directional introgression testing a five-taxon phylogeny
+James B. Pease
 http://www.github.com/jbpease/dfoil
 
-fasta2dfoil - fasta site counting script
-@author: James B. Pease
+fasta2dfoil -
+This script takes one or more FASTA files containing
+5 or 4 taxa and counts site patterns for use in DFOIL/Dstat analysis.
+To combine multiple FASTA files, each file should be sequences
+from one locus (i.e., one entry in the final table) and
+the names of sequences must be identical in all files.
+"""
 
+from __future__ import print_function
+import sys
+import argparse
+from itertools import groupby
+
+_LICENSE = """
 If you use this software please cite:
 Pease JB and MW Hahn. 2015.
 "Detection and Polarization of Introgression in a Five-taxon Phylogeny"
-Systematic Biology. Online.
+Systematic Biology. 64 (4): 651-662.
 http://www.dx.doi.org/10.1093/sysbio/syv023
-
-v.2015-06-11: Initial Version
-v.2015-11-21: Fixes for Python2to3
 
 This file is part of DFOIL.
 
@@ -32,11 +41,6 @@ You should have received a copy of the GNU General Public License
 along with DFOIL.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from __future__ import print_function
-import sys
-import argparse
-from itertools import groupby
-
 
 def fasta_iter(fasta_name):
     """
@@ -51,16 +55,12 @@ def fasta_iter(fasta_name):
         yield header, seq
 
 
-def main(arguments=None):
-    if arguments is None:
-        arguments = sys.argv[1:]
-    parser = argparse.ArgumentParser(description="""
-    This script takes one or more FASTA files containing
-    5 or 4 taxa and counts site patterns for use in DFOIL/Dstat analysis.
-    To combine multiple FASTA files, each file should be sequences
-    from one locus (i.e., one entry in the final table) and
-    the names of sequences must be identical in all files.
-    """)
+def generate_argparser():
+    parser = argparse.ArgumentParser(
+        prog="fasta2dfoil.py",
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        epilog=_LICENSE)
     parser.add_argument("fastafile", nargs='*',
                         help="""one or more input fasta
                                 files for each locus""")
@@ -71,12 +71,16 @@ def main(arguments=None):
                                 names must be
                                 consistent in all input files,
                                 outgroup should be last""")
-    parser.add_argument("--version", action="store_true",
-                        help="""display version info""")
+    parser.add_argument("--version", action="version", version="2017-06-14",
+                        help="display version information and quit")
+    return parser
+
+
+def main(arguments=None):
+    """Main method"""
+    arguments = arguments if arguments is not None else sys.argv[1:]
+    parser = generate_argparser()
     args = parser.parse_args(args=arguments)
-    if args.version:
-        print("fasta2dfoil: v.2015-11-21")
-        sys.exit()
     position = 0
     NTAXA = len(args.names)
     if NTAXA is 4:
@@ -112,10 +116,9 @@ def main(arguments=None):
                 continue
             if set(site) - set('ATGC'):
                 continue
-            site_code = ''.join([x == site[-1] and 'A' or 'B'
+            site_code = ''.join(['A' if x == site[-1] else 'B'
                                  for x in site])
             site_count[site_code] = site_count.get(site_code, 0) + 1
-
         with open(args.out, 'a') as outfile:
             outfile.write("{}\t{}\t{}\n".format(infilename, position,
                           '\t'.join([str(site_count.get(x, 0))

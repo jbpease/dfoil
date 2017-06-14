@@ -1,0 +1,59 @@
+\select@language {english}
+\contentsline {chapter}{\numberline {1}Getting Started}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}What is dfoil?}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}How do I cite this sofware?}{1}{section.1.2}
+\contentsline {section}{\numberline {1.3}Requirements}{1}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}Optional}{1}{subsection.1.3.1}
+\contentsline {section}{\numberline {1.4}Installation}{2}{section.1.4}
+\contentsline {section}{\numberline {1.5}Preparing your data}{2}{section.1.5}
+\contentsline {subsection}{\numberline {1.5.1}Generating an AB-pattern count file from a FASTA file.}{2}{subsection.1.5.1}
+\contentsline {subsection}{\numberline {1.5.2}Using a prepared count file:}{2}{subsection.1.5.2}
+\contentsline {section}{\numberline {1.6}Running dfoil.py}{3}{section.1.6}
+\contentsline {subsection}{\numberline {1.6.1}Basic usage}{3}{subsection.1.6.1}
+\contentsline {subsection}{\numberline {1.6.2}Pre-check}{3}{subsection.1.6.2}
+\contentsline {subsection}{\numberline {1.6.3}Modes}{3}{subsection.1.6.3}
+\contentsline {subsection}{\numberline {1.6.4}Advanced Weight Parameters}{3}{subsection.1.6.4}
+\contentsline {section}{\numberline {1.7}Output Format}{4}{section.1.7}
+\contentsline {section}{\numberline {1.8}Releases}{4}{section.1.8}
+\contentsline {subsection}{\numberline {1.8.1}2017-06-14}{4}{subsection.1.8.1}
+\contentsline {subsection}{\numberline {1.8.2}2017-01-29}{4}{subsection.1.8.2}
+\contentsline {subsection}{\numberline {1.8.3}2015-11-23}{4}{subsection.1.8.3}
+\contentsline {subsection}{\numberline {1.8.4}2015-04-17}{4}{subsection.1.8.4}
+\contentsline {subsection}{\numberline {1.8.5}2014-04-28}{5}{subsection.1.8.5}
+\contentsline {subsection}{\numberline {1.8.6}2014-02-07}{5}{subsection.1.8.6}
+\contentsline {section}{\numberline {1.9}License}{5}{section.1.9}
+\contentsline {chapter}{\numberline {2}Program Parameter Descriptions}{7}{chapter.2}
+\contentsline {section}{\numberline {2.1}dfoil\_analyze}{7}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Description}{7}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Parameters}{7}{subsection.2.1.2}
+\contentsline {subsubsection}{infile}{7}{subsubsection*.3}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{7}{subsubsection*.4}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}ndigits}}{7}{subsubsection*.5}
+\contentsline {section}{\numberline {2.2}dfoil\_sim}{8}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Description}{8}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Parameters}{8}{subsection.2.2.2}
+\contentsline {subsubsection}{outputfile}{8}{subsubsection*.6}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{8}{subsubsection*.7}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}coaltimes}}{8}{subsubsection*.8}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mdest}}{8}{subsubsection*.9}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mrate}}{8}{subsubsection*.10}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}msfile}}{9}{subsubsection*.11}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}msource}}{9}{subsubsection*.12}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mspath}}{9}{subsubsection*.13}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mtimes}}{9}{subsubsection*.14}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mu}}{9}{subsubsection*.15}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}nconverge}}{9}{subsubsection*.16}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}nloci}}{9}{subsubsection*.17}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}popsize}}{10}{subsubsection*.18}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}quiet}}{10}{subsubsection*.19}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}recomb}}{10}{subsubsection*.20}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}rho}}{10}{subsubsection*.21}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}window}}{10}{subsubsection*.22}
+\contentsline {section}{\numberline {2.3}fasta2dfoil}{10}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Description}{10}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Parameters}{11}{subsection.2.3.2}
+\contentsline {subsubsection}{fastafile}{11}{subsubsection*.23}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{11}{subsubsection*.24}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}names/-n} (required)}{11}{subsubsection*.25}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}out/-o} (required)}{11}{subsubsection*.26}
+\contentsline {chapter}{\numberline {3}Indices and tables}{13}{chapter.3}
