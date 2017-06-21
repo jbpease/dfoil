@@ -39,10 +39,10 @@
 
 
 \title{dfoil Documentation}
-\date{Jun 14, 2017}
+\date{Jun 21, 2017}
 \release{2017-06-14}
 \author{James B. Pease}
-\newcommand{\sphinxlogo}{\vbox{}}
+\newcommand{\sphinxlogo}{\sphinxincludegraphics{logo.png}\par}
 \renewcommand{\releasename}{Release}
 \makeindex
 
@@ -55,7 +55,7 @@
 
 
 \chapter{Getting Started}
-\label{\detokenize{intro::doc}}\label{\detokenize{intro:welcome-to-dfoil-s-documentation}}\label{\detokenize{intro:getting-started}}
+\label{\detokenize{intro::doc}}\label{\detokenize{intro:getting-started}}\label{\detokenize{intro:welcome-to-dfoil-s-documentation}}
 
 \section{What is dfoil?}
 \label{\detokenize{intro:what-is-dfoil}}
@@ -288,13 +288,259 @@ dfoil is distributed in the hope that it will be useful, but WITHOUT ANY WARRANT
 
 
 \chapter{Program Parameter Descriptions}
-\label{\detokenize{prog_desc::doc}}\label{\detokenize{prog_desc:program-parameter-descriptions}}
+\label{\detokenize{prog_desc:program-parameter-descriptions}}\label{\detokenize{prog_desc::doc}}
+
+\section{dfoil}
+\label{\detokenize{prog_desc:dfoil}}
+
+\subsection{Description}
+\label{\detokenize{prog_desc:description}}
+DFOIL: Directional introgression testing a five-taxon phylogeny
+dfoil - Calculate DFOIL and D-statistics stats from one or more count files.
+James B. Pease
+\sphinxurl{http://www.github.com/jbpease/dfoil}
+
+USAGE: dfoil.py INPUTFILE1 … \textendash{}out OUTPUTFILE1 …
+
+
+\subsection{Parameters}
+\label{\detokenize{prog_desc:parameters}}
+
+\subsubsection{\sphinxstyleliteralintitle{-h/-{-}help}}
+\label{\detokenize{prog_desc:h-help}}
+\sphinxstylestrong{Description:} show this help message and exit
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}infile} (required)}
+\label{\detokenize{prog_desc:infile-required}}
+\sphinxstylestrong{Description:} input tab-separated counts file
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} None
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}out} (required)}
+\label{\detokenize{prog_desc:out-required}}
+\sphinxstylestrong{Description:} outputs tab-separated DFOIL stats
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} None
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}beta1}}
+\label{\detokenize{prog_desc:beta1}}\begin{description}
+\item[{\sphinxstylestrong{Description:} beta1 coefficient for single-B patterns,}] \leavevmode
+defaults: DFOIL/Dstatalt=1.0,
+DFOILalt,Dstat=0,Dpart=N.A.
+
+\end{description}
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} None
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}beta2}}
+\label{\detokenize{prog_desc:beta2}}\begin{description}
+\item[{\sphinxstylestrong{Description:} beta2 coefficient for double-B patterns,}] \leavevmode
+defaults: Dpart=N.A., others=1.0
+
+\end{description}
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 1.0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}beta3}}
+\label{\detokenize{prog_desc:beta3}}\begin{description}
+\item[{\sphinxstylestrong{Description:} beta3 coefficient for triple-B patterns}] \leavevmode
+defaults: DFOIL/DFOILalt=1.0,
+Dstat/Dpart=N.A.
+
+\end{description}
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 1.0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}mincount}}
+\label{\detokenize{prog_desc:mincount}}
+\sphinxstylestrong{Description:} minium number of D denominator sites per window
+
+\sphinxstylestrong{Type:} integer; \sphinxstylestrong{Default:} 10
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}mintotal}}
+\label{\detokenize{prog_desc:mintotal}}
+\sphinxstylestrong{Description:} minimum total number of sites in a region
+
+\sphinxstylestrong{Type:} integer; \sphinxstylestrong{Default:} 50
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}mode}}
+\label{\detokenize{prog_desc:mode}}\begin{description}
+\item[{\sphinxstylestrong{Description:} dfoil = DFOIL,}] \leavevmode
+dfoilalt = DFOIL without single-B patterns,
+partitioned = Partitioned D-statistics,
+dstat = Four-Taxon D-statistic,
+dstatalt = Four-Taxon D-statistic
+with single-B patterns
+
+\end{description}
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} dfoil
+
+\sphinxstylestrong{Choices:} {[}‘dfoil’, ‘dfoilalt’, ‘partitioned’, ‘dstat’, ‘dstatalt’{]}
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot}}
+\label{\detokenize{prog_desc:plot}}
+\sphinxstylestrong{Description:} write plot to file path(s) given
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} None
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_background}}
+\label{\detokenize{prog_desc:plot-background}}\begin{description}
+\item[{\sphinxstylestrong{Description:} 0-1.0 background intensity}] \leavevmode
+(0=none, default=0.3)
+
+\end{description}
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 0.3
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_color}}
+\label{\detokenize{prog_desc:plot-color}}
+\sphinxstylestrong{Description:} choose color mode
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} color
+
+\sphinxstylestrong{Choices:} {[}‘color’, ‘colordark’, ‘bw’, ‘bwdark’{]}
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_height}}
+\label{\detokenize{prog_desc:plot-height}}
+\sphinxstylestrong{Description:} height of plot (in cm)
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 8.0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_hideaxes}}
+\label{\detokenize{prog_desc:plot-hideaxes}}
+\sphinxstylestrong{Description:} hide axes labels
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_hidekey}}
+\label{\detokenize{prog_desc:plot-hidekey}}
+\sphinxstylestrong{Description:} hide plot key
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_labels}}
+\label{\detokenize{prog_desc:plot-labels}}
+\sphinxstylestrong{Description:} taxon labels
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} None
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_lineweight}}
+\label{\detokenize{prog_desc:plot-lineweight}}
+\sphinxstylestrong{Description:} line weight for dplots (default=1pt)
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 1.0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_noanc}}
+\label{\detokenize{prog_desc:plot-noanc}}\begin{description}
+\item[{\sphinxstylestrong{Description:} do not plot background for}] \leavevmode
+ancestral introgression
+
+\end{description}
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_smooth}}
+\label{\detokenize{prog_desc:plot-smooth}}
+\sphinxstylestrong{Description:} average D-stats over this number of points
+
+\sphinxstylestrong{Type:} integer; \sphinxstylestrong{Default:} None
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_totals}}
+\label{\detokenize{prog_desc:plot-totals}}
+\sphinxstylestrong{Description:} add a background plot of total site counts
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_width}}
+\label{\detokenize{prog_desc:plot-width}}
+\sphinxstylestrong{Description:} width of plot (in cm)
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 24.0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}plot\_yscale}}
+\label{\detokenize{prog_desc:plot-yscale}}
+\sphinxstylestrong{Description:} Y-axis min-max value, default is 1
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} 1.0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}pre-check-only}}
+\label{\detokenize{prog_desc:pre-check-only}}
+\sphinxstylestrong{Description:} Only run the data pre-check (formely pre-dfoil.py)
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}pvalue}}
+\label{\detokenize{prog_desc:pvalue}}\begin{description}
+\item[{\sphinxstylestrong{Description:} minimum P-value cutoff for regions,}] \leavevmode
+can specify one P-value for all four tests
+or two separate ones for DFO/DIL and DFI/DOL
+(or D1/D2 and D12 for ‘partitioned’)
+
+\end{description}
+
+\sphinxstylestrong{Type:} float; \sphinxstylestrong{Default:} {[}0.01, 0.01{]}
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}runlength}}
+\label{\detokenize{prog_desc:runlength}}\begin{description}
+\item[{\sphinxstylestrong{Description:} if two introgressing windows are separated}] \leavevmode
+by this many windows of non-introgression
+color in the intervening windows to
+create a more continuous visual appearance
+
+\end{description}
+
+\sphinxstylestrong{Type:} integer; \sphinxstylestrong{Default:} 0
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}skip-pre-check}}
+\label{\detokenize{prog_desc:skip-pre-check}}
+\sphinxstylestrong{Description:} Skip running the data pre-check (formely pre-dfoil)
+
+\sphinxstylestrong{Type:} boolean flag
+
+
+\subsubsection{\sphinxstyleliteralintitle{-{-}zerochar}}
+\label{\detokenize{prog_desc:zerochar}}\begin{description}
+\item[{\sphinxstylestrong{Description:} list of strings used in place of zeros}] \leavevmode
+in the input file default is {[}“.”, “NA”{]}
+
+\end{description}
+
+\sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} {[}‘.’, ‘NA’{]}
+
 
 \section{dfoil\_analyze}
 \label{\detokenize{prog_desc:dfoil-analyze}}
 
 \subsection{Description}
-\label{\detokenize{prog_desc:description}}
+\label{\detokenize{prog_desc:id1}}
 DFOIL: Directional introgression testing a five-taxon phylogeny
 dfoil\_analyze: Given a dfoil output file, gives summary statistics to stdout
 James B. Pease
@@ -302,7 +548,7 @@ James B. Pease
 
 
 \subsection{Parameters}
-\label{\detokenize{prog_desc:parameters}}
+\label{\detokenize{prog_desc:id2}}
 
 \subsubsection{infile}
 \label{\detokenize{prog_desc:infile}}
@@ -312,7 +558,7 @@ James B. Pease
 
 
 \subsubsection{\sphinxstyleliteralintitle{-h/-{-}help}}
-\label{\detokenize{prog_desc:h-help}}
+\label{\detokenize{prog_desc:id3}}
 \sphinxstylestrong{Description:} show this help message and exit
 
 \sphinxstylestrong{Type:} boolean flag
@@ -329,7 +575,7 @@ James B. Pease
 \label{\detokenize{prog_desc:dfoil-sim}}
 
 \subsection{Description}
-\label{\detokenize{prog_desc:id1}}
+\label{\detokenize{prog_desc:id4}}
 DFOIL: Directional introgression testing a five-taxon phylogeny
 dfoil\_sim - simulation of sequences for testing dfoil
 James B. Pease
@@ -337,7 +583,7 @@ James B. Pease
 
 
 \subsection{Parameters}
-\label{\detokenize{prog_desc:id2}}
+\label{\detokenize{prog_desc:id5}}
 
 \subsubsection{outputfile}
 \label{\detokenize{prog_desc:outputfile}}
@@ -347,7 +593,7 @@ James B. Pease
 
 
 \subsubsection{\sphinxstyleliteralintitle{-h/-{-}help}}
-\label{\detokenize{prog_desc:id3}}
+\label{\detokenize{prog_desc:id6}}
 \sphinxstylestrong{Description:} show this help message and exit
 
 \sphinxstylestrong{Type:} boolean flag
@@ -477,7 +723,7 @@ file instead of running ms.
 \label{\detokenize{prog_desc:fasta2dfoil}}
 
 \subsection{Description}
-\label{\detokenize{prog_desc:id4}}
+\label{\detokenize{prog_desc:id7}}
 DFOIL: Directional introgression testing a five-taxon phylogeny
 James B. Pease
 \sphinxurl{http://www.github.com/jbpease/dfoil}
@@ -491,7 +737,7 @@ the names of sequences must be identical in all files.
 
 
 \subsection{Parameters}
-\label{\detokenize{prog_desc:id5}}
+\label{\detokenize{prog_desc:id8}}
 
 \subsubsection{fastafile}
 \label{\detokenize{prog_desc:fastafile}}\begin{description}
@@ -504,7 +750,7 @@ files for each locus
 
 
 \subsubsection{\sphinxstyleliteralintitle{-h/-{-}help}}
-\label{\detokenize{prog_desc:id6}}
+\label{\detokenize{prog_desc:id9}}
 \sphinxstylestrong{Description:} show this help message and exit
 
 \sphinxstylestrong{Type:} boolean flag
