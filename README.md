@@ -1,4 +1,4 @@
-![logo](https://github.com/jbpease/shear/blob/master/doc/icon.png)
+![logo](https://github.com/jbpease/dfoil/blob/master/doc/logo.png)
 
 # dfoil
 
