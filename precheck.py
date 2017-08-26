@@ -39,12 +39,21 @@ SITECODES = dict([(x, "{}{}".format('A' * (7 - len(bin(x))),
 
 
 def pre_check(window_data, mode='dfoil', verbose=True):
-    sum_data = {}
+    sum_data = dict([(x, 0) for x in range(0, 32, 2)])
     for window in window_data:
         for code in window.counts:
             sum_data[code] = sum_data.get(
                 code, 0) + window.counts[code]
     # Check 1
+    check_concordant(sum_data, mode, verbose=verbose)
+    # Check2
+    divergence_order(sum_data, mode, verbose=verbose)
+    # Check3
+    check_terminal(sum_data, mode, verbose=verbose)
+    return ''
+
+
+def check_concordant(sum_data, mode, verbose=True):
     checkok = True
     if verbose is True:
         print("="*79)
@@ -52,18 +61,30 @@ def pre_check(window_data, mode='dfoil', verbose=True):
 (Note that this is normal when introgression is extreme, but could also
 indicate the taxa are out of order):""")
         print("-"*79)
-    for concode in (2, 4, 8, 16, 6, 24):
-        for discode in (10, 12, 14, 18, 20, 22, 26, 28):
-            if sum_data[concode] < sum_data[discode]:
+    if mode == 'dfoil':
+        concordant_patterns = (2, 4, 8, 16, 6, 24)
+        discordant_patterns = (10, 12, 14, 18, 20, 22, 26, 28)
+    elif mode == 'dstat':
+        concordant_patterns = (2, 4, 8, 12)
+        discordant_patterns = (6, 10)
+    for concode in concordant_patterns:
+        for discode in discordant_patterns:
+            if sum_data.get(concode, 0) < sum_data.get(discode, 0):
                 print(("WARNING: Total count of "
                        "discordant pattern {}={} is higher than "
                        "concordant pattern {}={}").format(
-                    SITECODES[discode], sum_data[discode],
-                    SITECODES[concode], sum_data[concode]))
+                    SITECODES.get(discode, 0), sum_data.get(discode, 0),
+                    SITECODES.get(concode, 0), sum_data.get(concode, 0)))
                 checkok = False
-    if checkok:
+    if checkok and verbose is True:
         print("Pass")
-    # Check2
+    print("="*79)
+    return ''
+
+
+def divergence_order(sum_data, mode, verbose=True):
+    if mode != 'dfoil':
+        return ''
     checkok = True
     if verbose is True:
         print("="*79)
@@ -72,38 +93,54 @@ indicate the taxa are out of order):""")
         print("-"*79)
     for abcode in (8, 16):
         for cdcode in (2, 4):
-            if sum_data[abcode] > sum_data[cdcode]:
+            if sum_data.get(abcode, 0) > sum_data.get(cdcode, 0):
                 print(("WARNING: Total count of A/B terminal substitutions "
                        "{}={} is higher than C/D terminal substitutions {}={}"
-                       ).format(SITECODES[abcode], sum_data[abcode],
-                                SITECODES[cdcode], sum_data[cdcode]))
+                       ).format(SITECODES.get(abcode, 0),
+                                sum_data.get(abcode, 0),
+                                SITECODES.get(cdcode, 0),
+                                sum_data.get(cdcode, 0)))
                 checkok = False
     if checkok:
         print("Pass")
     print("="*79)
-    # Check3
+    return ''
+
+
+def check_terminal(sum_data, mode, verbose=True):
     checkok = True
     if verbose is True:
         print("="*79)
         print("Checking that terminal branch pairs are "
               "proportionate approximately")
         print("-"*79)
-    abratio = float(sum_data[16]) / sum_data[8] if sum_data[8] > 0 else "inf"
-    print("BAAAA/ABAAA ratio = {} ({}/{})".format(abratio, sum_data[16],
-                                                  sum_data[8]))
-    if abratio == "inf" or (0.8 < abratio > 1.25):
-        checkok = False
-        print("WARNING: P1/P2 ratio deviates more than 25% from 1.0")
-    cdratio = float(sum_data[4]) / sum_data[2] if sum_data[2] > 0 else "inf"
-    print("AABAA/AAABA ratio = {} ({}/{})".format(cdratio, sum_data[4],
-                                                  sum_data[2]))
-    if cdratio == "inf" or (0.8 < cdratio > 1.25):
-        checkok = False
-        print("WARNING: P3/P4 ratio deviates more than 25% from 1.0")
-    if checkok:
-        print("Pass")
+    if mode == 'dfoil':
+        abratio = (float(sum_data[16]) / sum_data[8]
+                   if sum_data[8] > 0 else "inf")
+        print("BAAAA/ABAAA ratio = {} ({}/{})".format(abratio, sum_data[16],
+                                                      sum_data[8]))
+        if abratio == "inf" or (0.8 < abratio > 1.25):
+            checkok = False
+            print("WARNING: P1/P2 ratio deviates more than 25% from 1.0")
+        cdratio = (float(sum_data[4]) / sum_data[2]
+                   if sum_data[2] > 0 else "inf")
+        print("AABAA/AAABA ratio = {} ({}/{})".format(cdratio, sum_data[4],
+                                                      sum_data[2]))
+        if cdratio == "inf" or (0.8 < cdratio > 1.25):
+            checkok = False
+            print("WARNING: P3/P4 ratio deviates more than 25% from 1.0")
+    elif mode == 'dstat':
+        cdratio = (float(sum_data[8]) / sum_data[4]
+                   if sum_data[4] > 0 else "inf")
+        print("BAAA/ABAA ratio = {} ({}/{})".format(cdratio, sum_data[8],
+                                                    sum_data[4]))
+        if cdratio == "inf" or (0.8 < cdratio > 1.25):
+            checkok = False
+            print("WARNING: P1/P2 ratio deviates more than 25% from 1.0")
+        if checkok:
+            print("Pass")
     print("="*79)
-    return ''
+
 
 if __name__ == "__main__":
     print("pre-dfoil can no longer be run on its own.")

@@ -14,76 +14,77 @@
 \contentsline {subsection}{\numberline {1.6.3}Modes}{3}{subsection.1.6.3}
 \contentsline {subsection}{\numberline {1.6.4}Advanced Weight Parameters}{3}{subsection.1.6.4}
 \contentsline {section}{\numberline {1.7}Output Format}{4}{section.1.7}
-\contentsline {section}{\numberline {1.8}Releases}{4}{section.1.8}
-\contentsline {subsection}{\numberline {1.8.1}2017-06-14}{4}{subsection.1.8.1}
-\contentsline {subsection}{\numberline {1.8.2}2017-01-29}{4}{subsection.1.8.2}
-\contentsline {subsection}{\numberline {1.8.3}2015-11-23}{4}{subsection.1.8.3}
-\contentsline {subsection}{\numberline {1.8.4}2015-04-17}{4}{subsection.1.8.4}
-\contentsline {subsection}{\numberline {1.8.5}2014-04-28}{5}{subsection.1.8.5}
-\contentsline {subsection}{\numberline {1.8.6}2014-02-07}{5}{subsection.1.8.6}
-\contentsline {section}{\numberline {1.9}License}{5}{section.1.9}
-\contentsline {chapter}{\numberline {2}Program Parameter Descriptions}{7}{chapter.2}
-\contentsline {section}{\numberline {2.1}dfoil}{7}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Description}{7}{subsection.2.1.1}
-\contentsline {subsection}{\numberline {2.1.2}Parameters}{7}{subsection.2.1.2}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{7}{subsubsection*.3}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}infile} (required)}{7}{subsubsection*.4}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}out} (required)}{7}{subsubsection*.5}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}beta1}}{8}{subsubsection*.6}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}beta2}}{8}{subsubsection*.7}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}beta3}}{8}{subsubsection*.8}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mincount}}{8}{subsubsection*.9}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mintotal}}{8}{subsubsection*.10}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mode}}{8}{subsubsection*.11}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot}}{9}{subsubsection*.12}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_background}}{9}{subsubsection*.13}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_color}}{9}{subsubsection*.14}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_height}}{9}{subsubsection*.15}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_hideaxes}}{9}{subsubsection*.16}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_hidekey}}{9}{subsubsection*.17}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_labels}}{9}{subsubsection*.18}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_lineweight}}{10}{subsubsection*.19}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_noanc}}{10}{subsubsection*.20}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_smooth}}{10}{subsubsection*.21}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_totals}}{10}{subsubsection*.22}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_width}}{10}{subsubsection*.23}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_yscale}}{10}{subsubsection*.24}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}pre-check-only}}{10}{subsubsection*.25}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}pvalue}}{11}{subsubsection*.26}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}runlength}}{11}{subsubsection*.27}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}skip-pre-check}}{11}{subsubsection*.28}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}zerochar}}{11}{subsubsection*.29}
-\contentsline {section}{\numberline {2.2}dfoil\_analyze}{11}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Description}{11}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Parameters}{11}{subsection.2.2.2}
-\contentsline {subsubsection}{infile}{11}{subsubsection*.30}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{12}{subsubsection*.31}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}ndigits}}{12}{subsubsection*.32}
-\contentsline {section}{\numberline {2.3}dfoil\_sim}{12}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Description}{12}{subsection.2.3.1}
-\contentsline {subsection}{\numberline {2.3.2}Parameters}{12}{subsection.2.3.2}
-\contentsline {subsubsection}{outputfile}{12}{subsubsection*.33}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{12}{subsubsection*.34}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}coaltimes}}{12}{subsubsection*.35}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mdest}}{13}{subsubsection*.36}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mrate}}{13}{subsubsection*.37}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}msfile}}{13}{subsubsection*.38}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}msource}}{13}{subsubsection*.39}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mspath}}{13}{subsubsection*.40}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mtimes}}{13}{subsubsection*.41}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mu}}{13}{subsubsection*.42}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}nconverge}}{14}{subsubsection*.43}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}nloci}}{14}{subsubsection*.44}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}popsize}}{14}{subsubsection*.45}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}quiet}}{14}{subsubsection*.46}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}recomb}}{14}{subsubsection*.47}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}rho}}{14}{subsubsection*.48}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}window}}{14}{subsubsection*.49}
-\contentsline {section}{\numberline {2.4}fasta2dfoil}{15}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Description}{15}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.2}Parameters}{15}{subsection.2.4.2}
-\contentsline {subsubsection}{fastafile}{15}{subsubsection*.50}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{15}{subsubsection*.51}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}names/-n} (required)}{15}{subsubsection*.52}
-\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}out/-o} (required)}{15}{subsubsection*.53}
-\contentsline {chapter}{\numberline {3}Indices and tables}{17}{chapter.3}
+\contentsline {section}{\numberline {1.8}License}{4}{section.1.8}
+\contentsline {chapter}{\numberline {2}Program Parameter Descriptions}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}dfoil}{5}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Description}{5}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Parameters}{5}{subsection.2.1.2}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{5}{subsubsection*.3}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}infile} (required)}{5}{subsubsection*.4}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}out} (required)}{5}{subsubsection*.5}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}beta1}}{6}{subsubsection*.6}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}beta2}}{6}{subsubsection*.7}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}beta3}}{6}{subsubsection*.8}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mincount}}{6}{subsubsection*.9}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mintotal}}{6}{subsubsection*.10}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mode}}{6}{subsubsection*.11}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot}}{7}{subsubsection*.12}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_background}}{7}{subsubsection*.13}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_color}}{7}{subsubsection*.14}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_height}}{7}{subsubsection*.15}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_hideaxes}}{7}{subsubsection*.16}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_hidekey}}{7}{subsubsection*.17}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_labels}}{7}{subsubsection*.18}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_lineweight}}{8}{subsubsection*.19}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_noanc}}{8}{subsubsection*.20}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_smooth}}{8}{subsubsection*.21}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_totals}}{8}{subsubsection*.22}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_width}}{8}{subsubsection*.23}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}plot\_yscale}}{8}{subsubsection*.24}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}pre-check-only}}{8}{subsubsection*.25}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}pvalue}}{9}{subsubsection*.26}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}runlength}}{9}{subsubsection*.27}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}skip-pre-check}}{9}{subsubsection*.28}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}zerochar}}{9}{subsubsection*.29}
+\contentsline {section}{\numberline {2.2}dfoil\_analyze}{9}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Description}{9}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Parameters}{9}{subsection.2.2.2}
+\contentsline {subsubsection}{infile}{9}{subsubsection*.30}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{10}{subsubsection*.31}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}ndigits}}{10}{subsubsection*.32}
+\contentsline {section}{\numberline {2.3}dfoil\_sim}{10}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Description}{10}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Parameters}{10}{subsection.2.3.2}
+\contentsline {subsubsection}{outputfile}{10}{subsubsection*.33}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{10}{subsubsection*.34}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}coaltimes}}{10}{subsubsection*.35}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mdest}}{11}{subsubsection*.36}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mrate}}{11}{subsubsection*.37}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}msfile}}{11}{subsubsection*.38}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}msource}}{11}{subsubsection*.39}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mspath}}{11}{subsubsection*.40}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mtimes}}{11}{subsubsection*.41}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}mu}}{11}{subsubsection*.42}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}nconverge}}{12}{subsubsection*.43}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}nloci}}{12}{subsubsection*.44}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}popsize}}{12}{subsubsection*.45}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}quiet}}{12}{subsubsection*.46}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}recomb}}{12}{subsubsection*.47}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}rho}}{12}{subsubsection*.48}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}window}}{12}{subsubsection*.49}
+\contentsline {section}{\numberline {2.4}fasta2dfoil}{13}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Description}{13}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Parameters}{13}{subsection.2.4.2}
+\contentsline {subsubsection}{fastafile}{13}{subsubsection*.50}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-h/-{-}help}}{13}{subsubsection*.51}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}names/-n} (required)}{13}{subsubsection*.52}
+\contentsline {subsubsection}{\sphinxstyleliteralintitle {-{-}out/-o} (required)}{13}{subsubsection*.53}
+\contentsline {chapter}{\numberline {3}Version History}{15}{chapter.3}
+\contentsline {section}{\numberline {3.1}2017-08-25}{15}{section.3.1}
+\contentsline {section}{\numberline {3.2}2017-06-14}{15}{section.3.2}
+\contentsline {section}{\numberline {3.3}2017-01-29}{15}{section.3.3}
+\contentsline {section}{\numberline {3.4}2015-11-23}{15}{section.3.4}
+\contentsline {section}{\numberline {3.5}2015-04-17}{15}{section.3.5}
+\contentsline {section}{\numberline {3.6}2014-04-28}{16}{section.3.6}
+\contentsline {section}{\numberline {3.7}2014-02-07}{16}{section.3.7}
+\contentsline {chapter}{\numberline {4}Indices and tables}{17}{chapter.4}

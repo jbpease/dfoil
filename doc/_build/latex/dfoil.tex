@@ -7,9 +7,22 @@
 
 \usepackage[utf8]{inputenc}
 \ifdefined\DeclareUnicodeCharacter
- \ifdefined\DeclareUnicodeCharacterAsOptional\else
+ \ifdefined\DeclareUnicodeCharacterAsOptional
+  \DeclareUnicodeCharacter{"00A0}{\nobreakspace}
+  \DeclareUnicodeCharacter{"2500}{\sphinxunichar{2500}}
+  \DeclareUnicodeCharacter{"2502}{\sphinxunichar{2502}}
+  \DeclareUnicodeCharacter{"2514}{\sphinxunichar{2514}}
+  \DeclareUnicodeCharacter{"251C}{\sphinxunichar{251C}}
+  \DeclareUnicodeCharacter{"2572}{\textbackslash}
+ \else
   \DeclareUnicodeCharacter{00A0}{\nobreakspace}
-\fi\fi
+  \DeclareUnicodeCharacter{2500}{\sphinxunichar{2500}}
+  \DeclareUnicodeCharacter{2502}{\sphinxunichar{2502}}
+  \DeclareUnicodeCharacter{2514}{\sphinxunichar{2514}}
+  \DeclareUnicodeCharacter{251C}{\sphinxunichar{251C}}
+  \DeclareUnicodeCharacter{2572}{\textbackslash}
+ \fi
+\fi
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amstext}
@@ -32,6 +45,9 @@
 \addto\captionsenglish{\renewcommand{\tablename}{Table}}
 \addto\captionsenglish{\renewcommand{\literalblockname}{Listing}}
 
+\addto\captionsenglish{\renewcommand{\literalblockcontinuedname}{continued from previous page}}
+\addto\captionsenglish{\renewcommand{\literalblockcontinuesname}{continues on next page}}
+
 \addto\extrasenglish{\def\pageautorefname{page}}
 
 \setcounter{tocdepth}{1}
@@ -39,8 +55,8 @@
 
 
 \title{dfoil Documentation}
-\date{Jun 21, 2017}
-\release{2017-06-14}
+\date{Aug 25, 2017}
+\release{2017-08-25}
 \author{James B. Pease}
 \newcommand{\sphinxlogo}{\sphinxincludegraphics{logo.png}\par}
 \renewcommand{\releasename}{Release}
@@ -55,7 +71,7 @@
 
 
 \chapter{Getting Started}
-\label{\detokenize{intro::doc}}\label{\detokenize{intro:getting-started}}\label{\detokenize{intro:welcome-to-dfoil-s-documentation}}
+\label{\detokenize{intro::doc}}\label{\detokenize{intro:welcome-to-dfoil-s-documentation}}\label{\detokenize{intro:getting-started}}
 
 \section{What is dfoil?}
 \label{\detokenize{intro:what-is-dfoil}}
@@ -243,39 +259,6 @@ then for each D-statistic:
 \end{itemize}
 
 (where “xx” will be replaced with FO, IL, FI, OL)
-
-
-\section{Releases}
-\label{\detokenize{intro:releases}}
-
-\subsection{2017-06-14}
-\label{\detokenize{intro:id1}}
-Major upgrade to Sphinx documentation. Integrated the pre-check (formerly pre-dfoil.py) into the main script. Minor fixes to syntax.
-
-
-\subsection{2017-01-29}
-\label{\detokenize{intro:id2}}
-Fixes for visual graph outputs, \sphinxtitleref{\textendash{}plot\_labels} has been fixed, replaced \sphinxtitleref{colornoanc} and \sphinxtitleref{colornoancdark} with \sphinxtitleref{\textendash{}plot\_noanc} option, changes to color pallette for code comprehension. Replaced \sphinxtitleref{\textendash{}plot-path} with just \sphinxtitleref{\textendash{}plot}, and \sphinxtitleref{\textendash{}plot show} is now deprecated.
-
-
-\subsection{2015-11-23}
-\label{\detokenize{intro:id3}}
-More fixes for Python3 compability, added ‘pre-dfoil.py’ that checks for issues in count files before running dfoil.py
-
-
-\subsection{2015-04-17}
-\label{\detokenize{intro:id4}}
-Minor updates and citation information, Publication Release Version
-
-
-\subsection{2014-04-28}
-\label{\detokenize{intro:id5}}
-Fixes for Python3 compatibility
-
-
-\subsection{2014-02-07}
-\label{\detokenize{intro:id6}}
-Re-release version on GitHub
 
 
 \section{License}
@@ -773,6 +756,44 @@ outgroup should be last
 \sphinxstylestrong{Description:} output count file, one entry per fasta
 
 \sphinxstylestrong{Type:} None; \sphinxstylestrong{Default:} None
+
+
+\chapter{Version History}
+\label{\detokenize{releases:version-history}}\label{\detokenize{releases::doc}}
+
+\section{2017-08-25}
+\label{\detokenize{releases:id1}}
+Updated precheck to include ‘dstat’ mode. Other fixes for precheck code.
+
+
+\section{2017-06-14}
+\label{\detokenize{releases:id2}}
+Major upgrade to Sphinx documentation. Integrated the pre-check (formerly pre-dfoil.py) into the main script. Minor fixes to syntax.
+
+
+\section{2017-01-29}
+\label{\detokenize{releases:id3}}
+Fixes for visual graph outputs, \sphinxtitleref{\textendash{}plot\_labels} has been fixed, replaced \sphinxtitleref{colornoanc} and \sphinxtitleref{colornoancdark} with \sphinxtitleref{\textendash{}plot\_noanc} option, changes to color pallette for code comprehension. Replaced \sphinxtitleref{\textendash{}plot-path} with just \sphinxtitleref{\textendash{}plot}, and \sphinxtitleref{\textendash{}plot show} is now deprecated.
+
+
+\section{2015-11-23}
+\label{\detokenize{releases:id4}}
+More fixes for Python3 compability, added ‘pre-dfoil.py’ that checks for issues in count files before running dfoil.py
+
+
+\section{2015-04-17}
+\label{\detokenize{releases:id5}}
+Minor updates and citation information, Publication Release Version
+
+
+\section{2014-04-28}
+\label{\detokenize{releases:id6}}
+Fixes for Python3 compatibility
+
+
+\section{2014-02-07}
+\label{\detokenize{releases:id7}}
+Re-release version on GitHub
 
 
 \chapter{Indices and tables}

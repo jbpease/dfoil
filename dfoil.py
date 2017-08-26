@@ -552,7 +552,7 @@ def generate_argparser():
     parser.add_argument("--skip-pre-check", action="store_true",
                         help=("Skip running the data pre-check "
                               "(formely pre-dfoil)"))
-    parser.add_argument("--version", action="version", version="2017-06-14",
+    parser.add_argument("--version", action="version", version="2017-08-25",
                         help="display version information and quit")
     return parser
 
@@ -613,8 +613,9 @@ def main(arguments=None):
                         window.meta['total'] = sum(window.counts.values())
                         window_data.append(window)
                     except Exception as exc:
-                        warn(
-                            "line invalid, skipping...\n{}".format(line))
+                        warnmsg = "line invalid, skipping...\n{}".format(line)
+                        warn(warnmsg)
+
                         continue
                     pre_check(window_data, mode=args.mode)
     if args.pre_check_only is True:

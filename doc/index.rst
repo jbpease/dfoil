@@ -12,6 +12,7 @@ Welcome to dfoil's documentation!
 
    intro.rst
    prog_desc.rst
+   releases.rst
 
 Indices and tables
 ==================

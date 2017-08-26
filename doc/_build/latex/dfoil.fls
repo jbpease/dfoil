@@ -47,10 +47,12 @@ INPUT /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 INPUT /usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 INPUT /usr/share/texmf-dist/tex/generic/babel/babel.sty
 INPUT /usr/share/texmf-dist/tex/generic/babel/babel.sty
+INPUT /usr/share/texmf-dist/tex/generic/babel/switch.def
 INPUT /usr/share/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texmf-dist/tex/generic/babel/babel.def
+INPUT /usr/share/texmf-dist/tex/generic/babel/switch.def
 INPUT /usr/share/texmf-dist/tex/latex/psnfss/times.sty
 INPUT /usr/share/texmf-dist/tex/latex/psnfss/times.sty
 INPUT /usr/share/texmf-dist/tex/latex/fncychap/fncychap.sty
@@ -71,8 +73,6 @@ INPUT /usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT /usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT /usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
 INPUT /usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
-INPUT /usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-INPUT /usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 INPUT /usr/share/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 INPUT /usr/share/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 INPUT /usr/share/texmf-dist/tex/latex/base/textcomp.sty
@@ -126,6 +126,8 @@ INPUT /usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 INPUT /usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 INPUT /usr/share/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 INPUT /usr/share/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+INPUT /usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+INPUT /usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 INPUT /usr/share/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 INPUT /usr/share/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 INPUT /usr/share/texmf-dist/tex/generic/oberdiek/ifluatex.sty
