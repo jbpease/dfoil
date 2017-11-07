@@ -11,6 +11,12 @@ This script takes one or more FASTA files containing
 To combine multiple FASTA files, each file should be sequences
 from one locus (i.e., one entry in the final table) and
 the names of sequences must be identical in all files.
+
+Example Usage:
+
+python3 fasta2dfoil.py INPUT.fasta --out OUTPUT.fasta \
+        --names TAXA1,TAXA2,TAXA3,TAXA4
+
 """
 
 from __future__ import print_function
@@ -66,12 +72,11 @@ def generate_argparser():
                                 files for each locus""")
     parser.add_argument("--out", "-o", required=True,
                         help="""output count file, one entry per fasta""")
-    parser.add_argument("--names", "-n", nargs='*', required=True,
-                        help="""Order of the 5 (or 4) taxa,
-                                names must be
-                                consistent in all input files,
+    parser.add_argument("--names", "-n", nargs=1, required=True,
+                        help="""Order of the 5 (or 4) taxa separated by commas.
+                                Names must be  consistent in all input files,
                                 outgroup should be last""")
-    parser.add_argument("--version", action="version", version="2017-06-14",
+    parser.add_argument("--version", action="version", version="2017-11-07",
                         help="display version information and quit")
     return parser
 
@@ -82,11 +87,12 @@ def main(arguments=None):
     parser = generate_argparser()
     args = parser.parse_args(args=arguments)
     position = 0
-    NTAXA = len(args.names)
-    if NTAXA is 4:
+    taxa = args.names[0].split(',')
+    ntaxa = len(taxa)
+    if ntaxa is 4:
         headers = ['AAAA', 'AABA', 'ABAA', 'ABBA',
                    'BAAA', 'BABA', 'BBAA', 'BBBA']
-    elif NTAXA is 5:
+    elif ntaxa is 5:
         headers = ['AAAAA', 'AAABA', 'AABAA', 'AABBA',
                    'ABAAA', 'ABABA', 'ABBAA', 'ABBBA',
                    'BAAAA', 'BAABA', 'BABAA', 'BABBA',
@@ -100,18 +106,18 @@ def main(arguments=None):
         seqs = {}
         for header, seq in fasta_iter(infilename):
             seqs[header] = seq
-        if list(sorted(seqs.keys())) != list(sorted(args.names)):
+        if list(sorted(seqs.keys())) != list(sorted(taxa)):
             raise RuntimeError(
                 "Error: Labels from {} ({}) do not match --names ({})".format(
-                    infilename, seqs.keys(), args.names))
+                    infilename, seqs.keys(), taxa))
         for label in seqs:
-            if len(seqs[label]) != len(seqs[args.names[0]]):
+            if len(seqs[label]) != len(seqs[taxa[0]]):
                 raise RuntimeError(
                     "Error: Sequences in {} are of unequal length ({})".format(
                         infilename, ",".join(["{}={}".format(
                             x, len(seqs[x])) for x in seqs])))
         for i in range(len(list(seqs.values())[0])):
-            site = [str(seqs[name][i]) for name in args.names]
+            site = [str(seqs[name][i]) for name in taxa]
             if len(set(site)) > 2:
                 continue
             if set(site) - set('ATGC'):

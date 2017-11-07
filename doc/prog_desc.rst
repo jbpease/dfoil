@@ -519,6 +519,11 @@ To combine multiple FASTA files, each file should be sequences
 from one locus (i.e., one entry in the final table) and
 the names of sequences must be identical in all files.
 
+Example Usage:
+
+python3 fasta2dfoil.py INPUT.fasta --out OUTPUT.fasta         --names TAXA1,TAXA2,TAXA3,TAXA4
+
+
 
 Parameters
 ----------
@@ -545,9 +550,8 @@ fastafile
 ``--names/-n`` (required)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Description:** Order of the 5 (or 4) taxa,
-                                names must be
-                                consistent in all input files,
+**Description:** Order of the 5 (or 4) taxa separated by commas.
+                                Names must be  consistent in all input files,
                                 outgroup should be last
 
 **Type:** None; **Default:** None

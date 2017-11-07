@@ -7,22 +7,9 @@
 
 \usepackage[utf8]{inputenc}
 \ifdefined\DeclareUnicodeCharacter
- \ifdefined\DeclareUnicodeCharacterAsOptional
-  \DeclareUnicodeCharacter{"00A0}{\nobreakspace}
-  \DeclareUnicodeCharacter{"2500}{\sphinxunichar{2500}}
-  \DeclareUnicodeCharacter{"2502}{\sphinxunichar{2502}}
-  \DeclareUnicodeCharacter{"2514}{\sphinxunichar{2514}}
-  \DeclareUnicodeCharacter{"251C}{\sphinxunichar{251C}}
-  \DeclareUnicodeCharacter{"2572}{\textbackslash}
- \else
+ \ifdefined\DeclareUnicodeCharacterAsOptional\else
   \DeclareUnicodeCharacter{00A0}{\nobreakspace}
-  \DeclareUnicodeCharacter{2500}{\sphinxunichar{2500}}
-  \DeclareUnicodeCharacter{2502}{\sphinxunichar{2502}}
-  \DeclareUnicodeCharacter{2514}{\sphinxunichar{2514}}
-  \DeclareUnicodeCharacter{251C}{\sphinxunichar{251C}}
-  \DeclareUnicodeCharacter{2572}{\textbackslash}
- \fi
-\fi
+\fi\fi
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amstext}
@@ -45,9 +32,6 @@
 \addto\captionsenglish{\renewcommand{\tablename}{Table}}
 \addto\captionsenglish{\renewcommand{\literalblockname}{Listing}}
 
-\addto\captionsenglish{\renewcommand{\literalblockcontinuedname}{continued from previous page}}
-\addto\captionsenglish{\renewcommand{\literalblockcontinuesname}{continues on next page}}
-
 \addto\extrasenglish{\def\pageautorefname{page}}
 
 \setcounter{tocdepth}{1}
@@ -55,7 +39,7 @@
 
 
 \title{dfoil Documentation}
-\date{Aug 25, 2017}
+\date{Nov 07, 2017}
 \release{2017-08-25}
 \author{James B. Pease}
 \newcommand{\sphinxlogo}{\sphinxincludegraphics{logo.png}\par}
@@ -71,7 +55,7 @@
 
 
 \chapter{Getting Started}
-\label{\detokenize{intro::doc}}\label{\detokenize{intro:welcome-to-dfoil-s-documentation}}\label{\detokenize{intro:getting-started}}
+\label{\detokenize{intro:welcome-to-dfoil-s-documentation}}\label{\detokenize{intro:getting-started}}\label{\detokenize{intro::doc}}
 
 \section{What is dfoil?}
 \label{\detokenize{intro:what-is-dfoil}}
@@ -718,6 +702,10 @@ To combine multiple FASTA files, each file should be sequences
 from one locus (i.e., one entry in the final table) and
 the names of sequences must be identical in all files.
 
+Example Usage:
+
+python3 fasta2dfoil.py INPUT.fasta \textendash{}out OUTPUT.fasta         \textendash{}names TAXA1,TAXA2,TAXA3,TAXA4
+
 
 \subsection{Parameters}
 \label{\detokenize{prog_desc:id8}}
@@ -741,9 +729,8 @@ files for each locus
 
 \subsubsection{\sphinxstyleliteralintitle{-{-}names/-n} (required)}
 \label{\detokenize{prog_desc:names-n-required}}\begin{description}
-\item[{\sphinxstylestrong{Description:} Order of the 5 (or 4) taxa,}] \leavevmode
-names must be
-consistent in all input files,
+\item[{\sphinxstylestrong{Description:} Order of the 5 (or 4) taxa separated by commas.}] \leavevmode
+Names must be  consistent in all input files,
 outgroup should be last
 
 \end{description}
