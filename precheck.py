@@ -94,8 +94,9 @@ def divergence_order(sum_data, mode, verbose=True):
     for abcode in (8, 16):
         for cdcode in (2, 4):
             if sum_data.get(abcode, 0) > sum_data.get(cdcode, 0):
-                print(("WARNING: Total count of A/B terminal substitutions "
-                       "{}={} is higher than C/D terminal substitutions {}={}"
+                print(("WARNING: Total count of P1/P2 terminal substitutions "
+                       "{}={} is higher than P3/P4 terminal substitutions "
+                       "{}={}"
                        ).format(SITECODES.get(abcode, 0),
                                 sum_data.get(abcode, 0),
                                 SITECODES.get(cdcode, 0),
