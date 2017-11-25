@@ -345,11 +345,13 @@ def plot_dfoil(path, params, window_data, bool_data):
     # Establish Colors
     pallette = ColorPallette(colormode=params['plot_color'],
                              bgalpha=params['plot_background'])
-    # Calcuate plot values
+    # Calculate plot values
     xdstat = [int(window.meta['position']) for window in window_data]
+    if all(x == xdstat[0] for x in xdstat):
+        xdstat = range(len(window_data))
     dplots = [[window.stats[dstat]['D'] for window in window_data]
               for dstat in dstat_names]
-    # Begin PLot
+    # Begin Plot
     if params['plot_smooth']:
         dplots = [[mean(dplot[x:x + params['plot_smooth']])
                    for x in range(0, len(dplot), params['plot_smooth'])]
@@ -410,8 +412,8 @@ def plot_dfoil(path, params, window_data, bool_data):
                           edgecolor="none")
         par1.set_ylim(0, max(totalplot) * 5)
         par1.set_ylabel("Total Count of Sites")
-    host.set_xlim(xmin=min(xbin), xmax=max(xbin))
-    host.set_axis_bgcolor(pallette.plotcolors['bg'])
+    # host.set_xlim(xmin=min(xbin), xmax=max(xbin))
+    host.set_facecolor(pallette.plotcolors['bg'])
     host.tick_params(direction="in", length=5, width=0.5)
     if params['plot_hideaxes']:
         host.set_xticklabels([], visible=False)
@@ -552,7 +554,7 @@ def generate_argparser():
     parser.add_argument("--skip-pre-check", action="store_true",
                         help=("Skip running the data pre-check "
                               "(formely pre-dfoil)"))
-    parser.add_argument("--version", action="version", version="2017-08-25",
+    parser.add_argument("--version", action="version", version="2017-011-25",
                         help="display version information and quit")
     return parser
 
