@@ -88,16 +88,21 @@ def main(arguments=None):
                 headers = line[1:].rstrip().split("\t")
             else:
                 entry = line.split()
+                if len(entry) < 32:
+                    continue
                 introg_call[entry[31]] = introg_call.get(entry[31], 0) + 1
                 for name, dstat in (('DFO', dfo), ('DIL', dil),
                                     ('DFI', dfi), ('DOL', dol)):
-                    chisq = float(entry[headers.index(name + '_chisq')])
-                    dval = float(entry[headers.index(name + '_stat')])
-                    pval = float(entry[headers.index(name + '_Pvalue')])
-                    if chisq != 0:
-                        dstat[0].append(dval)
-                        dstat[1].append(chisq)
-                        dstat[2].append(pval)
+                    chisq = entry[headers.index(name + '_chisq')]
+                    dval = entry[headers.index(name + '_stat')]
+                    pval = entry[headers.index(name + '_Pvalue')]
+                    if float(chisq) != 0:
+                        if dval != 'na':
+                            dstat[0].append(float(dval))
+                        if chisq != 'na':
+                            dstat[1].append(float(chisq))
+                        if pval != 'na':
+                            dstat[2].append(float(pval))
     statobj = (('DFO', dfo), ('DIL', dil), ('DFI', dfi), ('DOL', dol))
     statfields = ['D', 'chisq', 'Pvalue']
     print("\n# DFOIL component summary statistics:\n")
@@ -110,18 +115,21 @@ def main(arguments=None):
             ]))
         for i in range(len(dstat)):
             total = len(dstat[i])
-            entry = (
-                [(name if i == 0 else statfields[i]),
-                 min(dstat[i]), mean(dstat[i]), max(dstat[i])] +
-                [percentile(dstat[i], x) for x in (5, 25, 60, 75, 95)] +
-                [dstat[i] and var(dstat[i]) or 0,
-                 dstat[i] and std(dstat[i]) or 0,
-                 float(sum([int(abs(x) <= 0.01) for x in dstat[i]])) / total,
-                 float(sum([int(x > 0) for x in dstat[i]])) / total,
-                 float(sum([int(x <= 0.05) for x in dstat[i]])) / total,
-                 float(sum([int(x >= 0.46) for x in dstat[i]])) / total,
-                 float(sum([int(x >= 3.84) for x in dstat[i]])) / total,
-                 float(sum([int(x >= 6.64) for x in dstat[i]])) / total])
+            if len(dstat[i]) == 0:
+                entry = [name if i == 0 else statfields[i]] + ["na"] * 16
+            else:
+                entry = (
+                    [(name if i == 0 else statfields[i]),
+                     min(dstat[i]), mean(dstat[i]), max(dstat[i])] +
+                    [percentile(dstat[i], x) for x in (5, 25, 50, 75, 95)] +
+                    [var(dstat[i]), std(dstat[i]),
+                     float(sum([int(abs(x) <= 0.01) 
+                                for x in dstat[i]])) / total,
+                     float(sum([int(x > 0) for x in dstat[i]])) / total,
+                     float(sum([int(x <= 0.05) for x in dstat[i]])) / total,
+                     float(sum([int(x >= 0.46) for x in dstat[i]])) / total,
+                     float(sum([int(x >= 3.84) for x in dstat[i]])) / total,
+                     float(sum([int(x >= 6.64) for x in dstat[i]])) / total])
             printlist(entry, ndigits=args.ndigits)
     print("\n# Introgression Calls:\n")
     for (key, value) in iter(introg_call.items()):
