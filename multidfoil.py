@@ -81,21 +81,22 @@ PLOTFORMATS = ("eps", "jpeg", "jpg", "pdf", "pgf", "png",
 
 class DfoilTree(object):
 
-    def __init__(self, quintets=None, treepath=None):
-        self.quintets = quintets if quintets is not None else {}
+    def __init__(self, replicates=None, treepath=None, mode='dfoil'):
+        self.replicates = replicates if replicates is not None else {}
         self.tree = Phylo.read(treepath, 'newick')
         self.parents = {}
-        self._process_tree(self.tree)
+        if mode in ('dfoil', 'dfoilalt', 'partitioned'):
+            self._get_symmetric_quintets(self.tree)
+        elif mode in ('dstat', 'dstatalt'):
+            self._get_quartets(self.tree)
 
-    def _process_tree(self, tree):
+    def _get_symmetric_quintets(self, tree):
         # nodes = [x for x in tree.get_terminals()]
         for node in tree.get_nonterminals():
             if node.count_terminals() < 5:
                 continue
             if node[0].count_terminals() < 4 and node[1].count_terminals() < 4:
                 continue
-            # clades0 = [x.name for x in node[0].get_terminals()]
-            # clades1 = [x.name for x in node[1].get_terminals()]
             for (i, j) in [(0, 1), (1, 0)]:
                 if (node[i].count_terminals() >= 4 and
                     node[i][0].count_terminals() > 1 and
@@ -109,20 +110,43 @@ class DfoilTree(object):
                                     node.distance(first_taxa_pair[1])) > (
                                         node.distance(second_taxa_pair[0]) +
                                         node.distance(second_taxa_pair[1])):
-                                    quintet = tuple([
+                                    rep = tuple([
                                         second_taxa_pair[0],
                                         second_taxa_pair[1],
                                         first_taxa_pair[0],
                                         first_taxa_pair[1],
                                         outgroup])
                                 else:
-                                    quintet = tuple([
+                                    rep = tuple([
                                         first_taxa_pair[0],
                                         first_taxa_pair[1],
                                         second_taxa_pair[0],
                                         second_taxa_pair[1],
                                         outgroup])
-                                self.quintets[quintet] = {}
+                                self.replicates[rep] = {}
+            return ""
+
+    def _get_quartets(self, tree):
+        for node in tree.get_nonterminals():
+            if node.count_terminals() < 4:
+                continue
+            if node[0].count_terminals() < 3 and node[1].count_terminals() < 3:
+                continue
+            for (i, j) in [(0, 1), (1, 0)]:
+                if node[i].count_terminals() >= 3:
+                    for outgroup in node[j].get_terminals():
+                        for (p, q) in [(0, 1), (1, 0)]:
+                            if node[i][q].count_terminals() < 2:
+                                continue
+                            for outside_taxon in [node[i][p].get_terminals()]:
+                                for inside_taxa in combinations(
+                                        node[i][q].get_terminals(), 2):
+                                    quartet = tuple([
+                                        inside_taxa[0],
+                                        inside_taxa[1],
+                                        outside_taxon[0],
+                                        outgroup])
+                                    self.replicates[quartet] = {}
             return ""
 
 
@@ -184,24 +208,26 @@ class DataWindow(object):
                 (self._getcount((14, 22, 26, 28)) * beta2))
             self.stats['Tvalues'] = self.calculate_5taxon_tvalues()
         elif self.meta['mode'] == "partitioned":
-            self.stats['D1'] = dcrunch(self.counts[12], self.counts[20],
-                                       mincount=mincount)
-            self.stats['D2'] = dcrunch(self.counts[10], self.counts[18],
-                                       mincount=mincount)
-            self.stats['D12'] = dcrunch(self.counts[14], self.counts[22],
-                                        mincount=mincount)
+            self.stats['D1'] = dcrunch(
+                self._getcount(12), self._getcount(20),
+                mincount=mincount)
+            self.stats['D2'] = dcrunch(
+                self._getcount(10), self._getcount(18),
+                mincount=mincount)
+            self.stats['D12'] = dcrunch(
+                self._getcounts(14), self._getcount(22),
+                mincount=mincount)
             self.calculate_5taxon_tvalues()
-            self.stats['Dtotal'] = sum([self.counts[x] for x in
-                                        [10, 12, 14, 18, 20, 22]])
+            self.stats['Dtotal'] = self._getcounts((10, 12, 14, 18, 20, 22))
         elif self.meta['mode'] == 'dstat':
             self.stats['D'] = dcrunch(
-                self.counts[6] * beta1 + self.counts[8] * beta0,
-                self.counts[10] * beta1 + self.counts[4] * beta0,
+                self._getcount(6) * beta1 + self._getcount(8) * beta0,
+                self._getcount(10) * beta1 + self._getcount(4) * beta0,
                 mincount=mincount)
             self.stats['Dtotal'] = (
-                (sum([self.counts[x] for x in (4, 8)]) * beta0) +
-                (sum([self.counts[x] for x in (6, 10)]) * beta1))
-            self.calculate_4taxon_tvalues(self.counts)
+                (self._getcount((4, 8)) * beta0) +
+                (self._getcount((6, 10)) * beta1))
+            self.calculate_4taxon_tvalues()
         return ''
 
     def calculate_5taxon_tvalues(self, counts=None):
@@ -337,7 +363,9 @@ def make_header(mode):
     """
 
     return ("{}\n".format('\t'.join(
-        ['#P1', 'P2', 'P3', 'P4', 'PO', 'total', 'dtotal'] +
+        (['#P1', 'P2', 'P3', 'P4', 'PO'] if mode != "dstat" else [
+            '#P1', 'P2', 'P3', 'PO']) +
+        ['total', 'dtotal'] +
         DIVNAMES[mode] +
         ['{}_{}'.format(x, y)
          for x in STATNAMES[mode]
@@ -446,10 +474,6 @@ def main(arguments=None):
 #        raise NameError("input and output file have same path")
 #    if len(args.pvalue) == 1:
 #        args.pvalue = [args.pvalue[0], args.pvalue[0]]
-    # ===== Process Tree =====
-    tree = DfoilTree(treepath=args.tree)
-    sequences = dict((hdr, seq) for hdr, seq in fasta_iter(args.fasta))
-
     # Set beta parameters for presets
     if args.beta1 is None:
         args.beta1 = 1.0 if args.mode in ['dfoil', 'dstatalt'] else 0.
@@ -457,18 +481,22 @@ def main(arguments=None):
         args.mode = 'dstat'
     elif args.mode == 'dfoilalt':
         args.mode = 'dfoil'
+    # ===== Process Tree =====
+    tree = DfoilTree(treepath=args.tree, mode=args.mode)
+    # ===== Get Sequences ====
+    sequences = dict((hdr, seq) for hdr, seq in fasta_iter(args.fasta))
     # ===== MAIN DFOIL CALC =========
     window_data = []
-    for quintet in tree.quintets:
+    for rep in tree.replicates:
         try:
             window = DataWindow(meta=dict(
                 chrom='0', position=0,
-                quintet=[x.name for x in quintet],
+                rep=[x.name for x in rep],
                 mode=args.mode,
                 beta=(args.beta1, args.beta2, args.beta3)))
             window.counts = count_patterns(
-                [sequences[x.name] for x in quintet])
-            # print(quintet, window.counts)
+                [sequences[x.name] for x in rep])
+            # print(rep, window.counts)
             if sum(window.counts.values()) < args.mintotal:
                 continue
             window.meta['total'] = sum(window.counts.values())
@@ -477,13 +505,13 @@ def main(arguments=None):
             window_data.append(window)
         except Exception as exc:
             warn(
-                "quintet invalid, skipping...\n{}".format(quintet))
+                "quartet invalid, skipping...\n{}".format(rep))
             continue
 # ===== WRITE TO OUTPUT =====
     with open(args.out, 'wb') as outfile:
         outfile.write(make_header(args.mode))
         for window in window_data:
-            entry = window.meta['quintet'][:]
+            entry = window.meta['rep'][:]
             entry.append(str(window.meta['total']))
             entry.append(str(window.stats['Dtotal']))
             entry.extend([str(window.stats[x])
