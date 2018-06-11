@@ -84,6 +84,12 @@ class DataWindow(object):
         self.meta = meta or {}
         self.stats = stats or {}
 
+    def _getcount(self, bits):
+        try:
+            return sum([self.counts.get(x, 0) for x in bits])
+        except TypeError as te:
+            return self.counts.get(bits, 0)
+
     def dcalc(self, mincount=0):
         """Calculate D-statistics
             Arguments:
@@ -92,53 +98,63 @@ class DataWindow(object):
         (beta0, beta1, beta2) = self.meta['beta']
         if self.meta['mode'] == 'dfoil':
             self.stats['DFO'] = dcrunch(
-                (self.counts[2] * beta0 + self.counts[10] * beta1 +
-                 self.counts[20] * beta1 + self.counts[28] * beta2),
-                (self.counts[4] * beta0 + self.counts[12] * beta1 +
-                 self.counts[18] * beta1 + self.counts[26] * beta2),
+                (self._getcount(2) * beta0 +
+                 self._getcount((10, 20)) * beta1 +
+                 self._getcount(28) * beta2),
+                (self._getcount(4) * beta0 +
+                 self._getcount((12, 18)) * beta1 +
+                 self._getcount(26) * beta2),
                 mincount=mincount)
             self.stats['DIL'] = dcrunch(
-                (self.counts[2] * beta0 + self.counts[12] * beta1 +
-                 self.counts[18] * beta1 + self.counts[28] * beta2),
-                (self.counts[4] * beta0 + self.counts[10] * beta1 +
-                 self.counts[20] * beta1 + self.counts[26] * beta2),
+                (self._getcount(2) * beta0 +
+                 self._getcount((12, 18)) * beta1 +
+                 self._getcount(28) * beta2),
+                (self._getcount(4) * beta0 +
+                 self._getcount((10, 20)) * beta1 +
+                 self._getcount(26) * beta2),
                 mincount=mincount)
             self.stats['DFI'] = dcrunch(
-                (self.counts[8] * beta0 + self.counts[10] * beta1 +
-                 self.counts[20] * beta1 + self.counts[22] * beta2),
-                (self.counts[16] * beta0 + self.counts[12] * beta1 +
-                 self.counts[18] * beta1 + self.counts[14] * beta2),
+                (self._getcount(8) * beta0 +
+                 self._getcount((10, 20)) * beta1 +
+                 self._getcount(22) * beta2),
+                (self._getcount(16) * beta0 +
+                 self._getcount((12, 18)) * beta1 +
+                 self._getcount(14) * beta2),
                 mincount=mincount)
             self.stats['DOL'] = dcrunch(
-                (self.counts[8] * beta0 + self.counts[12] * beta1 +
-                 self.counts[18] * beta1 + self.counts[22] * beta2),
-                (self.counts[16] * beta0 + self.counts[10] * beta1 +
-                 self.counts[20] * beta1 + self.counts[14] * beta2),
+                (self._getcount(8) * beta0 +
+                 self._getcount((18, 22)) * beta1 +
+                 self._getcount(22) * beta2),
+                (self._getcount(16) * beta0 +
+                 self._getcount((10, 20)) * beta1 +
+                 self._getcount(14) * beta2),
                 mincount=mincount)
             self.stats['Dtotal'] = (
-                (sum([self.counts[x] for x in (2, 4, 8, 16)]) * beta0) +
-                (sum([self.counts[x] for x in (10, 12, 18, 20)]) * beta1) +
-                (sum([self.counts[x] for x in (14, 22, 26, 28)]) * beta2))
+                (self._getcount((2, 4, 8, 16)) * beta0) +
+                (self._getcount((10, 12, 18, 20)) * beta1) +
+                (self._getcount((14, 22, 26, 28)) * beta2))
             self.stats['Tvalues'] = self.calculate_5taxon_tvalues()
         elif self.meta['mode'] == "partitioned":
-            self.stats['D1'] = dcrunch(self.counts[12], self.counts[20],
-                                       mincount=mincount)
-            self.stats['D2'] = dcrunch(self.counts[10], self.counts[18],
-                                       mincount=mincount)
-            self.stats['D12'] = dcrunch(self.counts[14], self.counts[22],
-                                        mincount=mincount)
+            self.stats['D1'] = dcrunch(
+                self._getcount(12), self._getcount(20),
+                mincount=mincount)
+            self.stats['D2'] = dcrunch(
+                self._getcount(10), self._getcount(18),
+                mincount=mincount)
+            self.stats['D12'] = dcrunch(
+                self._getcounts(14), self._getcount(22),
+                mincount=mincount)
             self.calculate_5taxon_tvalues()
-            self.stats['Dtotal'] = sum([self.counts[x] for x in
-                                        [10, 12, 14, 18, 20, 22]])
+            self.stats['Dtotal'] = self._getcounts((10, 12, 14, 18, 20, 22))
         elif self.meta['mode'] == 'dstat':
             self.stats['D'] = dcrunch(
-                self.counts[6] * beta1 + self.counts[8] * beta0,
-                self.counts[10] * beta1 + self.counts[4] * beta0,
+                self._getcount(6) * beta1 + self._getcount(8) * beta0,
+                self._getcount(10) * beta1 + self._getcount(4) * beta0,
                 mincount=mincount)
             self.stats['Dtotal'] = (
-                (sum([self.counts[x] for x in (4, 8)]) * beta0) +
-                (sum([self.counts[x] for x in (6, 10)]) * beta1))
-            self.calculate_4taxon_tvalues(self.counts)
+                (self._getcount((4, 8)) * beta0) +
+                (self._getcount((6, 10)) * beta1))
+            self.calculate_4taxon_tvalues()
         return ''
 
     def calculate_5taxon_tvalues(self, counts=None):
@@ -619,7 +635,7 @@ def main(arguments=None):
                         warn(warnmsg)
 
                         continue
-                    pre_check(window_data, mode=args.mode)
+                pre_check(window_data, mode=args.mode)
     if args.pre_check_only is True:
         sys.exit()
     # ===== MAIN DFOIL CALC =========
