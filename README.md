@@ -23,7 +23,7 @@ Please also include a link to [http://www.github.com/jbpease/dfoil](http://www.g
 
 ## Manual
 
-See the manual for Quartet Sampling (https://github.com/jbpease/dfoil/blob/master/dfoil.pdf).
+See the manual for dfoil (https://github.com/jbpease/dfoil/blob/master/dfoil.pdf).
 
 ## License
 
