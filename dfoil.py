@@ -192,7 +192,7 @@ class DataWindow(object):
             pvalues = [pvalue_cutoffs[0]]
         dfoil_signature = []
         for j, statname in enumerate(STATNAMES[mode]):
-            if self.stats[statname]['Pvalue'] == 1:
+            if self.stats[statname]['Pvalue'] == -1:
                 self.stats['signature'] = 0
                 return ''
             if self.stats[statname]['Pvalue'] <= pvalues[j]:
@@ -268,12 +268,12 @@ def dcrunch(left_term, right_term, mincount=0):
     result['right'] = right_term
     result['Dtotal'] = left_term + right_term
     if not left_term + right_term:
-        result['Pvalue'] = 1.0
+        result['Pvalue'] = -1.0
         result['chisq'] = 0
         result['D'] = 0
     elif left_term + right_term < mincount:
         result['chisq'] = 0
-        result['Pvalue'] = 1.0
+        result['Pvalue'] = -1.0
         result['D'] = (float(left_term - right_term) /
                        (left_term + right_term))
     else:
