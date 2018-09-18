@@ -117,7 +117,7 @@ def main(arguments=None):
                         infilename, ",".join(["{}={}".format(
                             x, len(seqs[x])) for x in seqs])))
         for i in range(len(list(seqs.values())[0])):
-            site = [str(seqs[name][i]) for name in taxa]
+            site = [str(seqs[name][i]).upper() for name in taxa]
             if len(set(site)) > 2:
                 continue
             if set(site) - set('ATGC'):
@@ -131,6 +131,7 @@ def main(arguments=None):
                                      for x in headers])))
         position += 1
     return ''
+
 
 if __name__ == "__main__":
     main()
