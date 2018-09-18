@@ -122,7 +122,7 @@ def main(arguments=None):
                 continue
             if set(site) - set('ATGC'):
                 continue
-            site_code = ''.join(['A' if x == site[-1] else 'B'
+            site_code = ''.join(['A' if x == site[-1].upper() else 'B'
                                  for x in site])
             site_count[site_code] = site_count.get(site_code, 0) + 1
         with open(args.out, 'a') as outfile:
