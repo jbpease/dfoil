@@ -192,7 +192,7 @@ class DataWindow(object):
             pvalues = [pvalue_cutoffs[0]]
         dfoil_signature = []
         for j, statname in enumerate(STATNAMES[mode]):
-            if self.stats[statname]['Pvalue'] == -1:
+            if self.stats[statname]['isNA'] is True:
                 self.stats['signature'] = 0
                 return ''
             if self.stats[statname]['Pvalue'] <= pvalues[j]:
@@ -267,15 +267,18 @@ def dcrunch(left_term, right_term, mincount=0):
     result['left'] = left_term
     result['right'] = right_term
     result['Dtotal'] = left_term + right_term
-    if not left_term + right_term:
-        result['Pvalue'] = -1.0
+    result['isNA'] = True
+    if left_term == 0 and right_term == 0:
+        result['Pvalue'] = 1.0
         result['chisq'] = 0
         result['D'] = 0
+        result['isNA'] = True
     elif left_term + right_term < mincount:
         result['chisq'] = 0
-        result['Pvalue'] = -1.0
+        result['Pvalue'] = 1.0
         result['D'] = (float(left_term - right_term) /
                        (left_term + right_term))
+        result['isNA'] = True
     else:
         (val, pval) = chi2_test(left_term, right_term)
         result['chisq'] = val
