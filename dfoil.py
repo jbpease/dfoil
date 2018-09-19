@@ -267,7 +267,7 @@ def dcrunch(left_term, right_term, mincount=0):
     result['left'] = left_term
     result['right'] = right_term
     result['Dtotal'] = left_term + right_term
-    result['isNA'] = True
+    result['isNA'] = False
     if left_term == 0 and right_term == 0:
         result['Pvalue'] = 1.0
         result['chisq'] = 0
