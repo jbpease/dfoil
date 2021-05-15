@@ -6,7 +6,7 @@
 
 ## Author
 
-**James Pease** - [website](http://jbpease.github.io) - [@jamesbpease](http://www.twitter.com/jamesbpease/)
+**James Pease** - http://www.peaselab.org - [@jamesbpease](http://www.twitter.com/jamesbpease/)
 
 ## Citation Information
 
@@ -24,6 +24,12 @@ Please also include a link to [http://www.github.com/jbpease/dfoil](http://www.g
 ## Manual
 
 See the manual for dfoil (https://github.com/jbpease/dfoil/blob/master/dfoil.pdf).
+
+## FAQ/Assistance
+
+For Frequently Asked Questions, see the dfoil manual.
+
+Contact James Pease directly by email with any questions (contact info is at http://www.peaselab.org).
 
 ## License
 
